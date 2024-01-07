@@ -1,4 +1,6 @@
 package com.entrevistador.generadorfeedback.application.service;
 
-public class FeedbackService {
+import com.entrevistador.generadorfeedback.application.usescases.FeedbackCreation;
+
+public class FeedbackService implements FeedbackCreation {
 }
