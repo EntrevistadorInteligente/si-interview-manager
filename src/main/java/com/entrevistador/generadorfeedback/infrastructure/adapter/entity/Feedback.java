@@ -1,5 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.entity;
 
+import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaFeedbackDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,6 @@ import java.util.List;
 public class Feedback {
     @Id
     private String uuid;
-    private String feedback;
-    private List<String> preguntas;
-    private List<String> respuestas;
+    private String idEntrevista;
+    private List<EntrevistaFeedbackDto> feedback;
 }

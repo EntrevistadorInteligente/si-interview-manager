@@ -12,7 +12,8 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedbackDto {
+public class EntrevistaDto {
+    @JsonProperty("id_entrevista")
     private String idEntrevista;
-    private List<EntrevistaFeedbackDto> procesoEntrevista;
+    private List<String> preguntas;
 }

@@ -1,26 +1,32 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.FeedbackCreation;
+import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaFeedbackDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @RestController
-@RequestMapping
+@RequestMapping("/v1/feedback")
 @RequiredArgsConstructor
 public class FeedbackController {
     private final FeedbackCreation feedbackCreation;
 
-    //TODO: Dejar esta forma o cambiar al enfoce Router
-    @GetMapping(value = "/test", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Mono<ResponseEntity<?>> some(@RequestBody FeedbackDto request) {
-        return feedbackCreation.some(request)
-                .map(ResponseEntity::ok);
+    @PostMapping(value = "/solicitudes/entrevistas/{idEntrevista}")
+    public Mono<ResponseEntity<String>> crearSolicitudFeedback(
+            @PathVariable String idEntrevista,
+            @RequestBody List<EntrevistaFeedbackDto> procesoEntrevista) {
+        return this.feedbackCreation.iniciarSolicitudFeedback(FeedbackDto.builder()
+                        .idEntrevista(idEntrevista)
+                        .procesoEntrevista(procesoEntrevista)
+                        .build())
+                .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
+                        .body("Solicitud Feedback generado con exito")));
     }
 }

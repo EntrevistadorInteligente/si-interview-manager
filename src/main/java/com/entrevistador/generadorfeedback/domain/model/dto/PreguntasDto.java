@@ -12,7 +12,9 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedbackDto {
+public class PreguntasDto {
+    @JsonProperty("id_entrevista")
     private String idEntrevista;
+    @JsonProperty("proceso_entrevista")
     private List<EntrevistaFeedbackDto> procesoEntrevista;
 }
