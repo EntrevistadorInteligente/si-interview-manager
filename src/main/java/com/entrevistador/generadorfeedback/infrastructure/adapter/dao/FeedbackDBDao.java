@@ -35,6 +35,7 @@ public class FeedbackDBDao implements FeedbackDao {
     public Mono<FeedbackDto> actualizarProcesoFeedback(FeedbackDto preguntasDto) {
 
         return this.feedbackRepository.findByIdEntrevista(preguntasDto.getIdEntrevista())
+
                 .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + preguntasDto.getIdEntrevista())))
                 .flatMap(feedback ->  this.feedbackRepository.save(Feedback.builder()
                                 .uuid(feedback.getUuid())

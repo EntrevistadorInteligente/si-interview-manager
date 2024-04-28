@@ -10,6 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,9 +24,9 @@ class FeedbackServiceTest {
     private FeedbackDao feedbackDao;
 
     @Test
-    void testSome() {
+    void crearFeedbackTest() {
         FeedbackDto feedbackDto = FeedbackDto.builder().build();
-        when(this.feedbackDao.createFeedback()).thenReturn(Mono.just(feedbackDto));
+        when(this.feedbackDao.createFeedback(anyString(), anyList())).thenReturn(Mono.just(feedbackDto));
 
         Mono<FeedbackDto> publisher = this.feedbackService.some(FeedbackDto.builder().build());
 
@@ -33,6 +35,6 @@ class FeedbackServiceTest {
                 .expectNext(feedbackDto)
                 .verifyComplete();
 
-        verify(this.feedbackDao, times(1)).createFeedback();
+        verify(this.feedbackDao, times(1)).createFeedback(anyString(), anyList());
     }
 }
