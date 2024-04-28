@@ -10,6 +10,7 @@ import com.entrevistador.generadorfeedback.domain.port.sse.SseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FeedbackService implements FeedbackCreation {
 
     private final FeedbackDao feedbackDao;
@@ -31,6 +33,7 @@ public class FeedbackService implements FeedbackCreation {
 
     @Override
     public Mono<Void> crearEspacioEntrevista(EntrevistaDto entrevistaDto) {
+        log.info("Entrevista generada");
         return this.feedbackDao.createFeedback(entrevistaDto.getIdEntrevista(), entrevistaDto.getPreguntas())
                 .flatMap(feedbackDto ->
                         Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedbackDto))
@@ -54,6 +57,7 @@ public class FeedbackService implements FeedbackCreation {
 
     @Override
     public Mono<Void> guardarFeedback(FeedbackDto feedbackDto) {
+        log.info("Feedback generado");
         return this.feedbackDao.actualizarProcesoFeedback(feedbackDto)
                 .flatMap(feedback ->
                         Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedback))
