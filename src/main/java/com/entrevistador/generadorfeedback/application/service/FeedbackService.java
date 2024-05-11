@@ -34,6 +34,7 @@ public class FeedbackService implements FeedbackCreation {
     @Override
     public Mono<Void> crearEspacioEntrevista(EntrevistaDto entrevistaDto) {
         log.info("Entrevista generada");
+        log.info(String.format("Preguntas de entrevista id %s generadas exitosamente",entrevistaDto.getIdEntrevista()));
         return this.feedbackDao.createFeedback(entrevistaDto.getIdEntrevista(), entrevistaDto.getPreguntas())
                 .flatMap(feedbackDto ->
                         Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedbackDto))
@@ -57,7 +58,7 @@ public class FeedbackService implements FeedbackCreation {
 
     @Override
     public Mono<Void> guardarFeedback(FeedbackDto feedbackDto) {
-        log.info("Feedback generado");
+        log.info(String.format("Feedback de entrevista id %s generado exitosamente",feedbackDto.getIdEntrevista()));
         return this.feedbackDao.actualizarProcesoFeedback(feedbackDto)
                 .flatMap(feedback ->
                         Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedback))
