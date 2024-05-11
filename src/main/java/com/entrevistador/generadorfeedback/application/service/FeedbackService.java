@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,18 +36,26 @@ public class FeedbackService implements FeedbackCreation {
     public Mono<Void> crearEspacioEntrevista(EntrevistaDto entrevistaDto) {
         log.info("Entrevista generada");
         return this.feedbackDao.createFeedback(entrevistaDto.getIdEntrevista(), entrevistaDto.getPreguntas())
-                .flatMap(feedbackDto ->
-                        Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedbackDto))
-                                .flatMap(jsonData ->
-                                        this.sseService.emitEvent(ServerSentEvent.<String>builder()
-                                                .data(jsonData)
-                                                .build())
-                                )
-                                .onErrorMap(JsonProcessingException.class, e -> {
-                                    e.printStackTrace();
-                                    return new FeedbackException("Error processing JSON");
-                                })
-                );
+                .flatMap(feedbackDto -> {
+                    List<String> preguntas = entrevistaDto.getPreguntas();
+                    List<String> respuestas = feedbackDto.getRespuestas();
+                    List<String> respuestasFiltradas = new ArrayList<>();
+                    for (int i = 0; i < preguntas.size(); i++) {
+                        String pregunta = preguntas.get(i);
+                        String respuesta = respuestas.get(i);
+                        respuestasFiltradas.add(pregunta + ": " + respuesta);
+                    }
+                    return Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedbackDto))
+                            .flatMap(jsonData ->
+                                    this.sseService.emitEvent(ServerSentEvent.<String>builder()
+                                            .data(jsonData)
+                                            .build())
+                            )
+                            .onErrorMap(JsonProcessingException.class, e -> {
+                                e.printStackTrace();
+                                return new FeedbackException("Error processing JSON");
+                            });
+                });
     }
 
     @Override
@@ -58,19 +67,22 @@ public class FeedbackService implements FeedbackCreation {
     @Override
     public Mono<Void> guardarFeedback(FeedbackDto feedbackDto) {
         log.info("Feedback generado");
-        return this.feedbackDao.actualizarProcesoFeedback(feedbackDto)
-                .flatMap(feedback ->
-                        Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedback))
-                                .flatMap(jsonData ->
-                                        this.sseService.emitEvent(ServerSentEvent.<String>builder()
-                                                .data(jsonData)
-                                                .build())
-                                )
-                                .onErrorMap(JsonProcessingException.class, e -> {
-                                    e.printStackTrace();
-                                    return new FeedbackException("Error processing JSON");
-                                })
-                );
+        List<String> respuestas = feedbackDto.getRespuestas();
+        List<String> respuestasFiltradas = new ArrayList<>();
+        for (int i = 0; i < respuestas.size(); i++) {
+            String pregunta = feedbackDto.getPreguntas().get(i);
+            String respuesta = respuestas.get(i);
+            respuestasFiltradas.add(pregunta + ": " + respuesta);
+        }
+        return Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedbackDto))
+                .flatMap(jsonData ->
+                        this.sseService.emitEvent(ServerSentEvent.<String>builder()
+                                .data(jsonData)
+                                .build())
+                )
+                .onErrorMap(JsonProcessingException.class, e -> {
+                    e.printStackTrace();
+                    return new FeedbackException("Error processing JSON");
+                });
     }
-
 }

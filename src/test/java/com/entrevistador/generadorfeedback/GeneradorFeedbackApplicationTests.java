@@ -6,6 +6,7 @@ class GeneradorFeedbackApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
