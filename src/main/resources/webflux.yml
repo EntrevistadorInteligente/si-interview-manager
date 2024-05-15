@@ -1,0 +1,4 @@
+webflux:
+  entrevistamuestra:
+    urlbaseidentrevista: http://localhost:8081
+    endpointidentrevista: /api/orquestador/v1/entrevistador/public/entrevista_muestra_id?perfil=
