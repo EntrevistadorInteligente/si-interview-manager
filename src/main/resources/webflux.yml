@@ -1,4 +1,5 @@
-webflux:
-  entrevistamuestra:
-    urlbaseidentrevista: http://localhost:8081
-    endpointidentrevista: /api/orquestador/v1/entrevistador/public/entrevista_muestra_id?perfil=
+entrevistapruebaconst:
+  webfluxentrevistamuestra:
+    urlbase: http://localhost:8765
+    endpoint: /api/orquestador/v1/entrevistador/public/entrevista_muestra_id?perfil=
+  limitpreguntas: 3

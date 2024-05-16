@@ -4,18 +4,12 @@ import com.entrevistador.generadorfeedback.application.usescases.InterviewTest;
 import com.entrevistador.generadorfeedback.domain.model.dto.IdEntrevista;
 import com.entrevistador.generadorfeedback.domain.model.dto.SoloPreguntaImp;
 import com.entrevistador.generadorfeedback.domain.port.InterviewTestDao;
-import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxIdEntrevista;
+import com.entrevistador.generadorfeedback.infrastructure.properties.EntrevistaPruebaPorperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.Objects;
 
 
 @Service
@@ -23,19 +17,17 @@ import java.util.Objects;
 public class InterviewTestService implements InterviewTest {
     private final InterviewTestDao interviewTestDao;
     private final WebClient.Builder webClient;
-    private final WebFluxIdEntrevista webFluxIdEntrevista;
+    private final EntrevistaPruebaPorperties entrevistaPruebaPorperties;
     @Override
-    public Flux<SoloPreguntaImp> getPreguntas(String perfil, int limit) {
-        //logica para obtener el idEntrevista
-        //return this.interviewTestDao.getPreguntas("id",limit);
-        //return getIdEntrevista(perfil).flatMapMany(idEntrevista ->  interviewTestDao.getPreguntas(idEntrevista.getId(), limit));
-        return interviewTestDao.getPreguntas("662c22602477f7563c14a5c8",3);
+    public Flux<SoloPreguntaImp> getPreguntas(String perfil) {
+        //return getIdEntrevista(perfil).flatMapMany(idEntrevista ->  interviewTestDao.getPreguntas(idEntrevista.getId(), entrevistaPruebaPorperties.getLimitpreguntas()));
+        return interviewTestDao.getPreguntas("662c22602477f7563c14a5c8",entrevistaPruebaPorperties.getLimitpreguntas());
     }
 
     public Mono<IdEntrevista> getIdEntrevista(String perfil){
-        return this.webClient.baseUrl("http://localhost:8765").build()
+        return this.webClient.baseUrl(entrevistaPruebaPorperties.getWebfluxentrevistamuestra().getUrlbase()).build()
                 .get()
-                .uri("/api/orquestador/v1/entrevistador/public/entrevista_muestra_id?perfil=".concat(perfil))
+                .uri(entrevistaPruebaPorperties.getWebfluxentrevistamuestra().getEndpoint().concat(perfil))
                 .retrieve()
                 .bodyToMono(IdEntrevista.class);
     }
