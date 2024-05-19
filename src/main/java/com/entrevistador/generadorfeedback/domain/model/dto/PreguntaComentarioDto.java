@@ -5,14 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EntrevistaFeedbackDto {
+public class PreguntaComentarioDto {
+    private String idPregunta;
     private String pregunta;
-    private String respuesta;
-    private String feedback;
 }

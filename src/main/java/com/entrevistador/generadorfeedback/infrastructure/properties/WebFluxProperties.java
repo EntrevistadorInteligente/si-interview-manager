@@ -5,19 +5,22 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 @Getter
 @Setter
 @Component
-@ConfigurationProperties(prefix = "entrevistapruebaconst")
-public class EntrevistaPruebaPorperties {
+@ConfigurationProperties(prefix = "feedbackconst")
+public class WebFluxProperties {
 
-    private WebfluxComponent webfluxentrevistamuestra;
-    private int limitpreguntas;
+    private WebfluxComponent webFluxOrquestador;
+    private WebfluxComponent webFluxNotificaciones;
+    private int limitPreguntas;
 
     @Getter
     @Setter
     public static class WebfluxComponent {
-        private String urlbase;
-        private String endpoint;
+        private String urlBase;
+        private Map<String, String> endpoints;
     }
 }

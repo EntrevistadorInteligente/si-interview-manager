@@ -1,76 +1,89 @@
 package com.entrevistador.generadorfeedback.application.service;
 
 import com.entrevistador.generadorfeedback.application.usescases.FeedbackCreation;
+import com.entrevistador.generadorfeedback.application.usescases.PreguntaCreation;
+import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
 import com.entrevistador.generadorfeedback.domain.excepciones.FeedbackException;
 import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
 import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.NotifiacionDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaDto;
+import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
-import com.entrevistador.generadorfeedback.domain.port.sse.SseService;
+import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class FeedbackService implements FeedbackCreation {
+@AllArgsConstructor
+public class FeedbackService implements FeedbackCreation, PreguntaCreation, RespuestaCreation {
 
     private final FeedbackDao feedbackDao;
-    private final SseService sseService;
     private final JmsPublisherClient jmsPublisherClient;
+    private final NotificacionesClient notificacionesClient;
 
     @Override
-    public Mono<FeedbackDto> some(FeedbackDto request) {
-        return this.feedbackDao.createFeedback("", new ArrayList<>());
-    }
-
-    @Override
-    public Mono<Void> crearEspacioEntrevista(EntrevistaDto entrevistaDto) {
-        log.info("Entrevista generada");
-        return this.feedbackDao.createFeedback(entrevistaDto.getIdEntrevista(), entrevistaDto.getPreguntas())
-                .flatMap(feedbackDto ->
-                        Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedbackDto))
-                                .flatMap(jsonData ->
-                                        this.sseService.emitEvent(ServerSentEvent.<String>builder()
-                                                .data(jsonData)
-                                                .build())
-                                )
-                                .onErrorMap(JsonProcessingException.class, e -> {
-                                    e.printStackTrace();
-                                    return new FeedbackException("Error processing JSON");
-                                })
+    public Mono<Void> guardarPreguntas(EntrevistaDto entrevistaDto) {
+        log.info("Preguntas de entrevista id {} generadas exitosamente", entrevistaDto.getIdEntrevista());
+        return this.feedbackDao.guardarPreguntas(entrevistaDto)
+                .flatMap(entrevista ->
+                        generarNotificacion(
+                                entrevista.getUsername(),
+                                TipoNotificacionEnum.PG,
+                                entrevista.getIdEntrevista())
                 );
     }
 
     @Override
-    public Mono<Void> iniciarSolicitudFeedback(FeedbackDto preguntasDto) {
-        return this.feedbackDao.actualizarProcesoFeedback(preguntasDto)
+    public Flux<PreguntaComentarioDto> obtenerPreguntas(String entrevistaId) {
+        return this.feedbackDao.obtenerPreguntas(entrevistaId);
+    }
+
+    @Override
+    public Mono<Void> iniciarSolicitudFeedback(RespuestaDto respuestaDto) {
+        return this.feedbackDao.actualizarRespuestas(respuestaDto)
                 .flatMap(this.jmsPublisherClient::enviarsolicitudFeedback);
     }
 
     @Override
-    public Mono<Void> guardarFeedback(FeedbackDto feedbackDto) {
-        log.info("Feedback generado");
-        return this.feedbackDao.actualizarProcesoFeedback(feedbackDto)
+    public Mono<Void> actualizarFeedback(FeedbackDto feedbackDto) {
+        return this.feedbackDao.actualizarFeedback(feedbackDto)
                 .flatMap(feedback ->
-                        Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(feedback))
-                                .flatMap(jsonData ->
-                                        this.sseService.emitEvent(ServerSentEvent.<String>builder()
-                                                .data(jsonData)
-                                                .build())
-                                )
-                                .onErrorMap(JsonProcessingException.class, e -> {
-                                    e.printStackTrace();
-                                    return new FeedbackException("Error processing JSON");
-                                })
+                        generarNotificacion(feedback.getUsername(),
+                                TipoNotificacionEnum.FG,
+                                feedback.getIdEntrevista())
                 );
+    }
+
+    @Override
+    public Flux<FeedbackResponseDto> obtenerFeedback(String entrevistaId) {
+        return this.feedbackDao.obtenerFeedback(entrevistaId);
+    }
+
+    private Mono<Void> generarNotificacion(String userId,
+                                          TipoNotificacionEnum notificacion,
+                                          Object object) {
+        return
+                Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(object))
+                        .flatMap(jsonData ->
+                                this.notificacionesClient.enviar(userId, NotifiacionDto.builder()
+                                        .tipo(notificacion)
+                                        .mensaje(jsonData)
+                                        .build()
+                                )
+                                        .onErrorMap(JsonProcessingException.class, e -> {
+                                            log.error("Error processing JSON", e);
+                                            return new FeedbackException("Error processing JSON");
+                                        }));
     }
 
 }

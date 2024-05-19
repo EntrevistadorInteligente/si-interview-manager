@@ -6,16 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedbackDto {
-    @JsonProperty("id_entrevista")
-    private String idEntrevista;
-    private String username;
-    @JsonProperty("proceso_entrevista")
-    private List<FeedbackComentarioDto> procesoEntrevista;
+public class FeedbackComentarioDto {
+    @JsonProperty("id_pregunta")
+    private String idPregunta;
+    private String feedback;
 }

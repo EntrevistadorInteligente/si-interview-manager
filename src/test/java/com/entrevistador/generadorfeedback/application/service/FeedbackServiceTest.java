@@ -1,7 +1,11 @@
 package com.entrevistador.generadorfeedback.application.service;
 
+import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.NotifiacionDto;
+import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
+import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -22,19 +26,28 @@ class FeedbackServiceTest {
     private FeedbackService feedbackService;
     @Mock
     private FeedbackDao feedbackDao;
+    @Mock
+    private JmsPublisherClient jmsPublisherClient;
+    @Mock
+    private NotificacionesClient notificacionesClient;
 
     @Test
-    void crearFeedbackTest() {
-        FeedbackDto feedbackDto = FeedbackDto.builder().build();
-        when(this.feedbackDao.createFeedback(anyString(), anyList())).thenReturn(Mono.just(feedbackDto));
+    void shouldUpdateFeedbackWhenValidRequest() {
+        FeedbackDto feedbackDto = FeedbackDto.builder()
+                .idEntrevista("idEntrevista")
+                .username("username")
+                .build();
+        when(this.feedbackDao.actualizarFeedback(any(FeedbackDto.class))).thenReturn(Mono.just(feedbackDto));
+        when(this.notificacionesClient.enviar(anyString(),any(NotifiacionDto.class)))
+                .thenReturn(Mono.empty());
 
-        Mono<FeedbackDto> publisher = this.feedbackService.some(FeedbackDto.builder().build());
+        Mono<Void> publisher = this.feedbackService.actualizarFeedback(FeedbackDto.builder().build());
 
         StepVerifier
                 .create(publisher)
-                .expectNext(feedbackDto)
                 .verifyComplete();
 
-        verify(this.feedbackDao, times(1)).createFeedback(anyString(), anyList());
+        verify(this.feedbackDao, times(1)).actualizarFeedback(any(FeedbackDto.class));
     }
+
 }

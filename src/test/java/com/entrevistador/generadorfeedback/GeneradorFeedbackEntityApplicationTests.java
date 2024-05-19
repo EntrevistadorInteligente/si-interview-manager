@@ -2,7 +2,7 @@ package com.entrevistador.generadorfeedback;
 
 import org.junit.jupiter.api.Test;
 
-class GeneradorFeedbackApplicationTests {
+class GeneradorFeedbackEntityApplicationTests {
 
 	@Test
 	void contextLoads() {
