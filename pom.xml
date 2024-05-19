@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.entrevistador</groupId>
-	<artifactId>generador-feedbackEntity</artifactId>
+	<artifactId>generador-feedback</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>generador-feedbackEntity</name>
-	<description>Este microservicio esta encargado de generar la estructura del feedbackEntity y entergarlo al front </description>
+	<name>generador-feedback</name>
+	<description>Este microservicio esta encargado de generar la estructura del feedback y entergarlo al front </description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
