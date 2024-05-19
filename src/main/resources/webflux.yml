@@ -1,0 +1,10 @@
+feedbackconst:
+  webFluxOrquestador:
+    urlBase: ${URL_ORQUESTADOR}
+    endpoints:
+      entrevistaMuestraId: /v1/entrevistador/public/entrevista_muestra_id?perfil=
+  webFluxNotificaciones:
+    urlBase: ${URL_NOTIFICACIONES}
+    endpoints:
+      enviarEvento: /v1/eventos/enviar/
+  limitPreguntas: 3
