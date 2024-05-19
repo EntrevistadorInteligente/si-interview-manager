@@ -1,6 +1,5 @@
 package com.entrevistador.generadorfeedback.domain.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,10 +11,8 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedbackDto {
-    @JsonProperty("id_entrevista")
+public class PreguntaDto {
     private String idEntrevista;
     private String username;
-    @JsonProperty("proceso_entrevista")
-    private List<FeedbackComentarioDto> procesoEntrevista;
+    private List<PreguntaComentarioDto> procesoEntrevista;
 }

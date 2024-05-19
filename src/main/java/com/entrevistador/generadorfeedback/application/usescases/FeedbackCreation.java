@@ -1,15 +1,13 @@
 package com.entrevistador.generadorfeedback.application.usescases;
 
-import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 public interface FeedbackCreation {
 
-    Mono<FeedbackDto> some(FeedbackDto feedbackDto);
-    Mono<Void> crearEspacioEntrevista(EntrevistaDto feedbackDto);
-    Mono<Void> iniciarSolicitudFeedback(FeedbackDto feedbackDto);
-    Mono<Void> guardarFeedback(FeedbackDto feedbackDto);
+    Mono<Void> actualizarFeedback(FeedbackDto feedbackDto);
+
+    Flux<FeedbackResponseDto> obtenerFeedback(String idEntrevista);
 }

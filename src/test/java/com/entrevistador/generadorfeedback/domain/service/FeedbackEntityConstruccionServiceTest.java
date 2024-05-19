@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @ExtendWith(MockitoExtension.class)
-class FeedbackConstruccionServiceTest {
+class FeedbackEntityConstruccionServiceTest {
     @InjectMocks
     private FeedbackConstruccionService feedbackConstruccionService;
 
