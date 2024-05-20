@@ -22,7 +22,7 @@ public interface FeedbackRepository extends ReactiveMongoRepository<FeedbackEnti
                 '$unwind': {
                     'includeArrayIndex': 'index',
                     'preserveNullAndEmptyArrays': true,
-                    'path': '$feedback'
+                    'path': 'entrevista'
                 }
             }
             """,
@@ -35,7 +35,7 @@ public interface FeedbackRepository extends ReactiveMongoRepository<FeedbackEnti
             {
                 '$replaceRoot': {
                     'newRoot': {
-                        pregunta: '$feedback.pregunta'
+                        pregunta: 'entrevista.pregunta'
                     }
                 }
             }

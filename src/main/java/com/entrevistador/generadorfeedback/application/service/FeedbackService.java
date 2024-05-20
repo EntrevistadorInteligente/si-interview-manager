@@ -33,7 +33,7 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
 
     @Override
     public Mono<Void> guardarPreguntas(EntrevistaDto entrevistaDto) {
-        log.info(String.format("Preguntas de entrevista id %s generadas exitosamente", entrevistaDto.getIdEntrevista()));
+        log.info("Preguntas de entrevista id {} generadas exitosamente", entrevistaDto.getIdEntrevista());
         return this.feedbackDao.guardarPreguntas(entrevistaDto)
                 .flatMap(entrevista ->
                         generarNotificacion(
