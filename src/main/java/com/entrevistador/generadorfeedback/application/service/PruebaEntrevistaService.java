@@ -18,7 +18,7 @@ public class PruebaEntrevistaService implements PruebaEntrevista {
     @Override
     public Flux<SoloPreguntaImp> getPreguntas(String perfil) {
         //TODO: Cambiar el perfil por el id de la entrevista y remover id quemado
-        return pruebaEntrevistaDao.getPreguntas("662c22602477f7563c14a5c8", webFluxProperties.getLimitPreguntas());
+        return pruebaEntrevistaDao.getPreguntas("66481e493e360c336023dfec", webFluxProperties.getLimitPreguntas());
     }
 
 }
