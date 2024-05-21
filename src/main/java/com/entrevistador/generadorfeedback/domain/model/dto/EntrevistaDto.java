@@ -15,5 +15,7 @@ import java.util.List;
 public class EntrevistaDto {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
+    @JsonProperty("username")
+    private String username;
     private List<String> preguntas;
 }

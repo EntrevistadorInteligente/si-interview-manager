@@ -17,7 +17,7 @@ public class JmsListenerAdapter {
     private final FeedbackCreation feedbackCreation;
     private final PreguntaCreation preguntaCreation;
 
-    @KafkaListener(topics = "feedbackListenerTopic", groupId = "my-group")
+    @KafkaListener(topics = "feedbackListenerTopic", groupId = "my-group2")
     public void receptorFeedBack(String jsonData) {
         final ObjectMapper mapper = new ObjectMapper();
         try {
