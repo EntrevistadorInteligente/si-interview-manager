@@ -32,7 +32,7 @@ class PruebaEntrevistaServiceTest {
     public void setUp() {
         WebFluxProperties entrevistaPruebaPorperties = mock(WebFluxProperties.class);
         when(entrevistaPruebaPorperties.getLimitPreguntas()).thenReturn(10);
-        ReflectionTestUtils.setField(pruebaEntrevistaService, "entrevistaPruebaPorperties", entrevistaPruebaPorperties);
+        ReflectionTestUtils.setField(pruebaEntrevistaService, "webFluxProperties", entrevistaPruebaPorperties);
 
     }
 
