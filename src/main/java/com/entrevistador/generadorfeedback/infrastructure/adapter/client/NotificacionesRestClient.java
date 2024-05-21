@@ -27,7 +27,7 @@ public class NotificacionesRestClient implements NotificacionesClient {
     @Override
     public Mono<Void> enviar(String userId, NotifiacionDto notifiacionDto) {
         return this.webClient.post()
-                .uri(webFluxProperties.getWebFluxOrquestador()
+                .uri(webFluxProperties.getWebFluxNotificaciones()
                         .getEndpoints()
                         .get(EndpointNotificacionesEnum.ENVIAR_EVENTO.getDescripcion()).concat(userId))
                 .bodyValue(notifiacionDto)

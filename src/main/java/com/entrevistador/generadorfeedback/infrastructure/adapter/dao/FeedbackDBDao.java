@@ -30,7 +30,7 @@ public class FeedbackDBDao implements FeedbackDao {
     public Mono<PreguntaDto> guardarPreguntas(EntrevistaDto entrevistaDto) {
         return this.feedbackRepository.save(FeedbackEntity.builder()
                         .idEntrevista(entrevistaDto.getIdEntrevista())
-                        .username(entrevistaDto.getIdEntrevista())
+                        .username(entrevistaDto.getUsername())
                         .entrevista(entrevistaDto.getPreguntas().stream().map(s -> EntrevistaFeedbackEntity.builder()
                                 .idPregunta(UUID.randomUUID().toString())
                                 .pregunta(s)
@@ -38,6 +38,7 @@ public class FeedbackDBDao implements FeedbackDao {
                         .build())
                 .map(feedback -> PreguntaDto.builder()
                         .idEntrevista(feedback.getIdEntrevista())
+                        .username(feedback.getUsername())
                         .procesoEntrevista(feedback.getEntrevista().stream()
                                 .map(fb -> PreguntaComentarioDto.builder()
                                         .idPregunta(fb.getIdPregunta())
