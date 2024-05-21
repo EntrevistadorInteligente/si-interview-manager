@@ -14,6 +14,7 @@ import java.util.Map;
 public class WebFluxProperties {
 
     private WebfluxComponent webFluxOrquestador;
+    private WebfluxComponent webFluxFeedbackPregunta;
     private WebfluxComponent webFluxNotificaciones;
     private int limitPreguntas;
 

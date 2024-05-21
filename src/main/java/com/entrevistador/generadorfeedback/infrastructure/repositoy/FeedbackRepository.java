@@ -1,7 +1,7 @@
 package com.entrevistador.generadorfeedback.infrastructure.repositoy;
 
+import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.FeedbackEntity;
-import com.entrevistador.generadorfeedback.domain.model.dto.SoloPreguntaImp;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
@@ -22,7 +22,7 @@ public interface FeedbackRepository extends ReactiveMongoRepository<FeedbackEnti
                 '$unwind': {
                     'includeArrayIndex': 'index',
                     'preserveNullAndEmptyArrays': true,
-                    'path': 'entrevista'
+                    'path': '$entrevista'
                 }
             }
             """,
@@ -35,11 +35,12 @@ public interface FeedbackRepository extends ReactiveMongoRepository<FeedbackEnti
             {
                 '$replaceRoot': {
                     'newRoot': {
-                        pregunta: 'entrevista.pregunta'
+                        idPregunta: '$entrevista.idPregunta',
+                        pregunta: '$entrevista.pregunta'
                     }
                 }
             }
             """
     })
-    Flux<SoloPreguntaImp> obtenerPreguntas(String idEntrevista, int limit);
+    Flux<PreguntaComentarioDto> obtenerPreguntas(String idEntrevista, int limit);
 }
