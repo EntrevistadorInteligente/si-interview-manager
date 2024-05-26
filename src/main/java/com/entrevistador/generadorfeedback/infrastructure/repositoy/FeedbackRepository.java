@@ -1,5 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.repositoy;
 
+import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.FeedbackEntity;
 import org.springframework.data.mongodb.repository.Aggregation;
@@ -36,11 +37,13 @@ public interface FeedbackRepository extends ReactiveMongoRepository<FeedbackEnti
                 '$replaceRoot': {
                     'newRoot': {
                         idPregunta: '$entrevista.idPregunta',
-                        pregunta: '$entrevista.pregunta'
+                        pregunta: '$entrevista.pregunta',
+                        respuesta: '$entrevista.respuesta',
+                        feedback: '$entrevista.feedback'
                     }
                 }
             }
             """
     })
-    Flux<PreguntaComentarioDto> obtenerPreguntas(String idEntrevista, int limit);
+    Flux<FeedbackResponseDto> obtenerPreguntas(String idEntrevista, int limit);
 }
