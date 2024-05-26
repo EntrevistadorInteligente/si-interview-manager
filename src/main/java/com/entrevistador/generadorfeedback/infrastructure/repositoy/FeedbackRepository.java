@@ -1,7 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.repositoy;
 
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.FeedbackEntity;
 import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
