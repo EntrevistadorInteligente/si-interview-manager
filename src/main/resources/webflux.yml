@@ -3,10 +3,6 @@ feedbackconst:
     urlBase: ${URL_ORQUESTADOR}
     endpoints:
       entrevistaMuestraId: /v1/entrevistador/public/entrevista_muestra_id?perfil=
-  webFluxFeedbackPregunta:
-    urlBase: ${URL_PREPARADOR_ENTREVISTA}
-    endpoints:
-      obtenerFeedbackPreview: /feedback/preguntas
   webFluxNotificaciones:
     urlBase: ${URL_NOTIFICACIONES}
     endpoints:
