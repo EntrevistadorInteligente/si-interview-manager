@@ -1,6 +1,7 @@
 package com.entrevistador.generadorfeedback.application.service;
 
-import com.entrevistador.generadorfeedback.domain.model.dto.SoloPreguntaImp;
+import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
 import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,16 +33,16 @@ class PruebaEntrevistaServiceTest {
     public void setUp() {
         WebFluxProperties entrevistaPruebaPorperties = mock(WebFluxProperties.class);
         when(entrevistaPruebaPorperties.getLimitPreguntas()).thenReturn(10);
-        ReflectionTestUtils.setField(pruebaEntrevistaService, "webFluxProperties", entrevistaPruebaPorperties);
+        ReflectionTestUtils.setField(pruebaEntrevistaService, "entrevistaPruebaPorperties", entrevistaPruebaPorperties);
 
     }
 
     @Test
     void shouldGetPreguntasWhenValidRequest() {
-        SoloPreguntaImp soloPreguntaImp = new SoloPreguntaImp("");
+        FeedbackResponseDto soloPreguntaImp = new FeedbackResponseDto("","","","");
         when(this.pruebaEntrevistaDao.getPreguntas(anyString(), anyInt())).thenReturn(Flux.just(soloPreguntaImp));
 
-        Flux<SoloPreguntaImp> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
+        Flux<FeedbackResponseDto> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
 
         StepVerifier
                 .create(publisher)
