@@ -17,5 +17,5 @@ public class EntrevistaDto {
     private String idEntrevista;
     @JsonProperty("username")
     private String username;
-    private List<String> preguntas;
+    private List<PreguntaGeneradaDto> preguntas;
 }

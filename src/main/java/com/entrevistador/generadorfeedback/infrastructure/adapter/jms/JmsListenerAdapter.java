@@ -9,10 +9,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-@Configuration
+
 @RequiredArgsConstructor
+@Service
 public class JmsListenerAdapter {
     private final FeedbackCreation feedbackCreation;
     private final PreguntaCreation preguntaCreation;

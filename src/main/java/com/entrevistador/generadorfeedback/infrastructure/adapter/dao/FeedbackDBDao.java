@@ -33,7 +33,7 @@ public class FeedbackDBDao implements FeedbackDao {
                         .username(entrevistaDto.getUsername())
                         .entrevista(entrevistaDto.getPreguntas().stream().map(s -> EntrevistaFeedbackEntity.builder()
                                 .idPregunta(UUID.randomUUID().toString())
-                                .pregunta(s)
+                                .pregunta(s.getPregunta())
                                 .build()).toList())
                         .build())
                 .map(feedback -> PreguntaDto.builder()
@@ -82,7 +82,10 @@ public class FeedbackDBDao implements FeedbackDao {
                         feedbackEntity.getEntrevista().stream()
                                 .filter(fb -> fb.getIdPregunta().equals(feedbackComentarioDto.getIdPregunta()))
                                 .findFirst()
-                                .ifPresent(fb -> fb.setFeedback(feedbackComentarioDto.getFeedback()));
+                                .ifPresent(fb ->
+                                        fb.actualzarFeedback(feedbackComentarioDto.getFeedback(),
+                                                feedbackComentarioDto.getScore())
+                                );
                     });
                     return this.feedbackRepository.save(feedbackEntity);
                 })

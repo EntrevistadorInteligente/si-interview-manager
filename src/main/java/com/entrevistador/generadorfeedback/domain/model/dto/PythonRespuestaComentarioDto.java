@@ -18,4 +18,5 @@ public class PythonRespuestaComentarioDto {
     @JsonProperty("respuesta")
     private String respuesta;
 
+
 }
