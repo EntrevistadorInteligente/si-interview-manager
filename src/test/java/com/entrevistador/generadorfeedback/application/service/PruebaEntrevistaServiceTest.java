@@ -1,8 +1,10 @@
 package com.entrevistador.generadorfeedback.application.service;
 
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.IdEntrevista;
 import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
+import com.entrevistador.generadorfeedback.domain.port.client.OrquestadorClient;
 import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -27,13 +30,15 @@ class PruebaEntrevistaServiceTest {
     private PruebaEntrevistaService pruebaEntrevistaService;
     @Mock
     private PruebaEntrevistaDao pruebaEntrevistaDao;
+    @Mock
+    private OrquestadorClient orquestadorClient;
 
 
     @BeforeEach
     public void setUp() {
         WebFluxProperties entrevistaPruebaPorperties = mock(WebFluxProperties.class);
         when(entrevistaPruebaPorperties.getLimitPreguntas()).thenReturn(10);
-        ReflectionTestUtils.setField(pruebaEntrevistaService, "entrevistaPruebaPorperties", entrevistaPruebaPorperties);
+        ReflectionTestUtils.setField(pruebaEntrevistaService, "webFluxProperties", entrevistaPruebaPorperties);
 
     }
 
@@ -41,6 +46,10 @@ class PruebaEntrevistaServiceTest {
     void shouldGetPreguntasWhenValidRequest() {
         FeedbackResponseDto soloPreguntaImp = new FeedbackResponseDto("","","","");
         when(this.pruebaEntrevistaDao.getPreguntas(anyString(), anyInt())).thenReturn(Flux.just(soloPreguntaImp));
+        when(this.pruebaEntrevistaDao.getPreguntas(anyString(), anyInt())).thenReturn(Flux.just(soloPreguntaImp));
+        when(this.orquestadorClient.getIdEntrevista(anyString()))
+                .thenReturn(Mono.just(new IdEntrevista(anyString())));
+
 
         Flux<FeedbackResponseDto> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
 
