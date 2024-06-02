@@ -1,0 +1,64 @@
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Wrapper files from https://github.com/takari/maven-wrapper
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### STS (Spring Tool Suite) ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### Eclipse ###
+.project
+.classpath
+.settings/
+
+### VS Code ###
+.vscode/
+
+### Java ###
+hs_err_pid*
+
+### Others ###
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+*.log
+*.tar.gz
+*.zip
+*.rar
+
+# OS generated files #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
