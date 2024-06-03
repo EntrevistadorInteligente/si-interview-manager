@@ -25,7 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FeedbackDBDao implements FeedbackDao {
     private final FeedbackRepository feedbackRepository;
-
+    private final String MensajeId = "Id de estado no encontrado. ID: ";
     @Override
     public Mono<PreguntaDto> guardarPreguntas(EntrevistaDto entrevistaDto) {
         return this.feedbackRepository.save(FeedbackEntity.builder()
@@ -51,7 +51,7 @@ public class FeedbackDBDao implements FeedbackDao {
     @Override
     public Mono<RespuestaDto> actualizarRespuestas(RespuestaDto respuestaDto) {
         return this.feedbackRepository.findByIdEntrevista(respuestaDto.getIdEntrevista())
-                .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + respuestaDto.getIdEntrevista())))
+                .switchIfEmpty(Mono.error(new FeedbackException(MensajeId + respuestaDto.getIdEntrevista())))
                 .flatMap(feedbackEntity -> {
                     respuestaDto.getProcesoEntrevista().forEach(respuestaComentarioDto -> {
                         feedbackEntity.getEntrevista().stream()
@@ -76,7 +76,7 @@ public class FeedbackDBDao implements FeedbackDao {
     @Override
     public Mono<FeedbackDto> actualizarFeedback(FeedbackDto feedbackDto) {
         return this.feedbackRepository.findByIdEntrevista(feedbackDto.getIdEntrevista())
-                .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + feedbackDto.getIdEntrevista())))
+                .switchIfEmpty(Mono.error(new FeedbackException(MensajeId + feedbackDto.getIdEntrevista())))
                 .flatMap(feedbackEntity -> {
                     feedbackDto.getProcesoEntrevista().forEach(feedbackComentarioDto -> {
                         feedbackEntity.getEntrevista().stream()
@@ -104,7 +104,7 @@ public class FeedbackDBDao implements FeedbackDao {
     @Override
     public Flux<PreguntaComentarioDto> obtenerPreguntas(String entrevistaId) {
         return this.feedbackRepository.findByIdEntrevista(entrevistaId)
-                .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + entrevistaId)))
+                .switchIfEmpty(Mono.error(new FeedbackException(MensajeId + entrevistaId)))
                 .flatMapMany(feedbackEntity -> {
                     List<PreguntaComentarioDto> preguntas = feedbackEntity.getEntrevista().stream()
                             .map(fb -> PreguntaComentarioDto.builder()
@@ -120,7 +120,7 @@ public class FeedbackDBDao implements FeedbackDao {
     @Override
     public Flux<FeedbackResponseDto> obtenerFeedback(String entrevistaId) {
         return this.feedbackRepository.findByIdEntrevista(entrevistaId)
-                .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + entrevistaId)))
+                .switchIfEmpty(Mono.error(new FeedbackException(MensajeId + entrevistaId)))
                 .flatMapMany(feedbackEntity -> {
                     List<FeedbackResponseDto> feedback = feedbackEntity.getEntrevista().stream()
                             .map(fb -> FeedbackResponseDto.builder()
