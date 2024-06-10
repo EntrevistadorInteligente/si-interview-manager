@@ -78,15 +78,14 @@ public class FeedbackDBDao implements FeedbackDao {
         return this.feedbackRepository.findByIdEntrevista(feedbackDto.getIdEntrevista())
                 .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + feedbackDto.getIdEntrevista())))
                 .flatMap(feedbackEntity -> {
-                    feedbackDto.getProcesoEntrevista().forEach(feedbackComentarioDto -> {
-                        feedbackEntity.getEntrevista().stream()
-                                .filter(fb -> fb.getIdPregunta().equals(feedbackComentarioDto.getIdPregunta()))
-                                .findFirst()
-                                .ifPresent(fb ->
-                                        fb.actualzarFeedback(feedbackComentarioDto.getFeedback(),
-                                                feedbackComentarioDto.getScore())
-                                );
-                    });
+                    feedbackDto.getProcesoEntrevista().forEach(feedbackComentarioDto ->
+                            feedbackEntity.getEntrevista().stream()
+                            .filter(fb -> fb.getIdPregunta().equals(feedbackComentarioDto.getIdPregunta()))
+                            .findFirst()
+                            .ifPresent(fb ->
+                                    fb.actualzarFeedback(feedbackComentarioDto.getFeedback(),
+                                            feedbackComentarioDto.getScore())
+                            ));
                     return this.feedbackRepository.save(feedbackEntity);
                 })
                 .map(feedbackEntity -> FeedbackDto.builder()

@@ -1,6 +1,7 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
+import com.entrevistador.generadorfeedback.domain.model.dto.ConfirmacionDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaComentarioDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaDto;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class RespuestaController {
 
 
     @PostMapping(value = "/solicitudes-feedback/entrevistas/{idEntrevista}")
-    public Mono<ResponseEntity<String>> crearSolicitudFeedback(
+    public Mono<ResponseEntity<ConfirmacionDto>> crearSolicitudFeedback(
             @PathVariable String idEntrevista,
             @RequestBody List<RespuestaComentarioDto> procesoEntrevista) {
         return this.respuestaCreation.iniciarSolicitudFeedback(RespuestaDto.builder()
@@ -33,6 +34,6 @@ public class RespuestaController {
                         .procesoEntrevista(procesoEntrevista)
                         .build())
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
-                        .body("Solicitud Feedback generado con exito")));
+                        .body(ConfirmacionDto.builder().valor("Solicitud Feedback generado con exito").build())));
     }
 }
