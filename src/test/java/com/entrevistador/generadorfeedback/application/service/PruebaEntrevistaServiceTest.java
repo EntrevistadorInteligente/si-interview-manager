@@ -1,8 +1,7 @@
 package com.entrevistador.generadorfeedback.application.service;
 
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
 import com.entrevistador.generadorfeedback.domain.model.dto.IdEntrevista;
-import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
 import com.entrevistador.generadorfeedback.domain.port.client.OrquestadorClient;
 import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;
@@ -44,14 +43,14 @@ class PruebaEntrevistaServiceTest {
 
     @Test
     void shouldGetPreguntasWhenValidRequest() {
-        FeedbackResponseDto soloPreguntaImp = new FeedbackResponseDto("","","","");
+        FeedbackResponse soloPreguntaImp = new FeedbackResponse("", "", "", "");
         when(this.pruebaEntrevistaDao.getPreguntas(anyString(), anyInt())).thenReturn(Flux.just(soloPreguntaImp));
         when(this.pruebaEntrevistaDao.getPreguntas(anyString(), anyInt())).thenReturn(Flux.just(soloPreguntaImp));
         when(this.orquestadorClient.getIdEntrevista(anyString()))
                 .thenReturn(Mono.just(new IdEntrevista(anyString())));
 
 
-        Flux<FeedbackResponseDto> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
+        Flux<FeedbackResponse> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
 
         StepVerifier
                 .create(publisher)

@@ -1,9 +1,9 @@
 package com.entrevistador.generadorfeedback.application.usescases;
 
-import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaDto;
+import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import reactor.core.publisher.Mono;
 
 public interface RespuestaCreation {
 
-    Mono<Void> iniciarSolicitudFeedback(RespuestaDto respuestaDto);
+    Mono<Void> iniciarSolicitudFeedback(Respuesta respuestaDto);
 }

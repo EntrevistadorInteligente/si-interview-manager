@@ -1,13 +1,9 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.client;
 
-import com.entrevistador.generadorfeedback.domain.excepciones.FeedbackException;
 import com.entrevistador.generadorfeedback.domain.model.dto.NotifiacionDto;
 import com.entrevistador.generadorfeedback.domain.model.enums.EndpointNotificacionesEnum;
-import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
 import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;

@@ -1,9 +1,9 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.jms;
 
 import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
+import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import com.entrevistador.generadorfeedback.domain.model.dto.PythonResponseDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.converter.ModelConverter;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,27 +18,27 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @RequiredArgsConstructor
 public final class JmsPublisherAdapter implements JmsPublisherClient {
-    private final KafkaTemplate<String, Object> kafkaTemplate;
-
     @Value("${kafka.topic-feedback-solicitud-publisher}")
     private String feedbackPublisherTopic;
-    private final ModelConverter modelConverter;
+
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final FeedbackMapper feedbackMapper;
 
     @Override
-    public Mono<Void> enviarsolicitudFeedback(RespuestaDto respuestaDto) {
+    public Mono<Void> enviarsolicitudFeedback(Respuesta respuesta) {
         try {
-            PythonResponseDto pythonResponseDto = modelConverter.convertToDto(respuestaDto, PythonResponseDto.class);
+            PythonResponseDto pythonResponseDto = this.feedbackMapper.mapRespuestaToPythonResponseDto(respuesta);
 
             CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(feedbackPublisherTopic,
                     pythonResponseDto
             );
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + respuestaDto.getIdEntrevista() +
+                    System.out.println("Sent message=[" + respuesta.getIdEntrevista() +
                             "] with offset=[" + result.getRecordMetadata().offset() + "]");
                 } else {
                     System.out.println("Unable to send message=[" +
-                            respuestaDto.toString() + "] due to : " + ex.getMessage());
+                            respuesta.toString() + "] due to : " + ex.getMessage());
                 }
             });
 

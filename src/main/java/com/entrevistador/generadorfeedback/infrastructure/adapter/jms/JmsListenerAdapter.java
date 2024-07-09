@@ -4,6 +4,7 @@ import com.entrevistador.generadorfeedback.application.usescases.FeedbackCreatio
 import com.entrevistador.generadorfeedback.application.usescases.PreguntaCreation;
 import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 public class JmsListenerAdapter {
     private final FeedbackCreation feedbackCreation;
     private final PreguntaCreation preguntaCreation;
+    private final FeedbackMapper feedbackMapper;
 
     @KafkaListener(topics = "feedbackListenerTopic", groupId = "my-group2")
     public void receptorFeedBack(String jsonData) {
@@ -25,6 +27,7 @@ public class JmsListenerAdapter {
             FeedbackDto json = mapper.readValue(jsonData, FeedbackDto.class);
 
             Mono.just(json)
+                    .map(this.feedbackMapper::mapFeedbackDtoToFeedback)
                     .flatMap(this.feedbackCreation::actualizarFeedback)
                     .block();
         } catch (JsonProcessingException e) {
@@ -38,6 +41,7 @@ public class JmsListenerAdapter {
         try {
             EntrevistaDto json = mapper.readValue(jsonData, EntrevistaDto.class);
             Mono.just(json)
+                    .map(this.feedbackMapper::mapEntrevistaDtoToEntrevista)
                     .flatMap(this.preguntaCreation::guardarPreguntas)
                     .block();
         } catch (JsonProcessingException e) {
