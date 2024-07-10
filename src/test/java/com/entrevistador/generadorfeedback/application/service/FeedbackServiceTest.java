@@ -1,9 +1,8 @@
 package com.entrevistador.generadorfeedback.application.service;
 
 import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.NotifiacionDto;
-import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
+import com.entrevistador.generadorfeedback.domain.model.Feedback;
+import com.entrevistador.generadorfeedback.domain.model.Notificacion;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
 import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
 import org.junit.jupiter.api.Test;
@@ -33,21 +32,21 @@ class FeedbackServiceTest {
 
     @Test
     void shouldUpdateFeedbackWhenValidRequest() {
-        FeedbackDto feedbackDto = FeedbackDto.builder()
+        Feedback feedbackDto = Feedback.builder()
                 .idEntrevista("idEntrevista")
                 .username("username")
                 .build();
-        when(this.feedbackDao.actualizarFeedback(any(FeedbackDto.class))).thenReturn(Mono.just(feedbackDto));
-        when(this.notificacionesClient.enviar(anyString(),any(NotifiacionDto.class)))
+        when(this.feedbackDao.actualizarFeedback(any(Feedback.class))).thenReturn(Mono.just(feedbackDto));
+        when(this.notificacionesClient.enviar(anyString(), any(Notificacion.class)))
                 .thenReturn(Mono.empty());
 
-        Mono<Void> publisher = this.feedbackService.actualizarFeedback(FeedbackDto.builder().build());
+        Mono<Void> publisher = this.feedbackService.actualizarFeedback(Feedback.builder().build());
 
         StepVerifier
                 .create(publisher)
                 .verifyComplete();
 
-        verify(this.feedbackDao, times(1)).actualizarFeedback(any(FeedbackDto.class));
+        verify(this.feedbackDao, times(1)).actualizarFeedback(any(Feedback.class));
     }
 
 }

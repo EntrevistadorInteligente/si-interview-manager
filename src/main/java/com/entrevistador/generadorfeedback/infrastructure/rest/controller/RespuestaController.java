@@ -1,9 +1,9 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
-import com.entrevistador.generadorfeedback.domain.model.dto.ConfirmacionDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaComentarioDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.ConfirmacionDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.RespuestaComentarioDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,23 +16,21 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/v1/respuestas")
 @RequiredArgsConstructor
 public class RespuestaController {
-
     private final RespuestaCreation respuestaCreation;
+    private final FeedbackMapper feedbackMapper;
 
 
     @PostMapping(value = "/solicitudes-feedback/entrevistas/{idEntrevista}")
     public Mono<ResponseEntity<ConfirmacionDto>> crearSolicitudFeedback(
             @PathVariable String idEntrevista,
-            @RequestBody List<RespuestaComentarioDto> procesoEntrevista) {
-        return this.respuestaCreation.iniciarSolicitudFeedback(RespuestaDto.builder()
-                        .idEntrevista(idEntrevista)
-                        .procesoEntrevista(procesoEntrevista)
-                        .build())
+            @RequestBody List<RespuestaComentarioDto> procesoEntrevistaDto
+    ) {
+        return Mono.just(this.feedbackMapper.mapIdEntrevistaAndprocesoEntrevistaToRespuesta(idEntrevista, procesoEntrevistaDto))
+                .flatMap(this.respuestaCreation::iniciarSolicitudFeedback)
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
                         .body(ConfirmacionDto.builder().valor("Solicitud Feedback generado con exito").build())));
     }
