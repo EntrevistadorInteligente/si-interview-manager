@@ -1,0 +1,14 @@
+{
+  "uuid": "any",
+  "idEntrevista": "any",
+  "username": "any",
+  "entrevista": [
+    {
+      "idPregunta": "any",
+      "pregunta": "any",
+      "respuesta": "any",
+      "feedback": "any",
+      "score": "any"
+    }
+  ]
+}

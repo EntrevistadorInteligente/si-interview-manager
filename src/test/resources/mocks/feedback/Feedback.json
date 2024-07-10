@@ -1,0 +1,11 @@
+{
+  "idEntrevista": "any",
+  "username": "any",
+  "procesoEntrevista": [
+    {
+      "idPregunta": "any",
+      "feedback": "any",
+      "score": "any"
+    }
+  ]
+}

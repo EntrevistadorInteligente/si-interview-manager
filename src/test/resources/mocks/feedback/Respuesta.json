@@ -1,0 +1,10 @@
+{
+  "idEntrevista": "any",
+  "username": "any",
+  "procesoEntrevista": [
+    {
+      "idPregunta": "any",
+      "respuesta": "any"
+    }
+  ]
+}
