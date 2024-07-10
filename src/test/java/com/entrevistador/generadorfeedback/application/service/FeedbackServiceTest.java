@@ -2,7 +2,7 @@ package com.entrevistador.generadorfeedback.application.service;
 
 import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
-import com.entrevistador.generadorfeedback.domain.model.dto.NotifiacionDto;
+import com.entrevistador.generadorfeedback.domain.model.Notificacion;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
 import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class FeedbackServiceTest {
                 .username("username")
                 .build();
         when(this.feedbackDao.actualizarFeedback(any(Feedback.class))).thenReturn(Mono.just(feedbackDto));
-        when(this.notificacionesClient.enviar(anyString(), any(NotifiacionDto.class)))
+        when(this.notificacionesClient.enviar(anyString(), any(Notificacion.class)))
                 .thenReturn(Mono.empty());
 
         Mono<Void> publisher = this.feedbackService.actualizarFeedback(Feedback.builder().build());

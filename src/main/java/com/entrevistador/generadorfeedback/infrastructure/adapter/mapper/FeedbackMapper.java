@@ -4,6 +4,7 @@ import com.entrevistador.generadorfeedback.domain.model.Entrevista;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
 import com.entrevistador.generadorfeedback.domain.model.FeedbackComentario;
 import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
+import com.entrevistador.generadorfeedback.domain.model.Notificacion;
 import com.entrevistador.generadorfeedback.domain.model.Pregunta;
 import com.entrevistador.generadorfeedback.domain.model.PreguntaComentario;
 import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
@@ -13,6 +14,7 @@ import com.entrevistador.generadorfeedback.domain.model.RespuestaComentario;
 import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.domain.model.dto.NotificacionDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.PythonResponseDto;
 import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaComentarioDto;
@@ -70,4 +72,6 @@ public interface FeedbackMapper {
     @Mapping(target = "idEntrevista", source = "idEntrevista")
     @Mapping(target = "procesoEntrevista", source = "procesoEntrevista")
     Respuesta mapIdEntrevistaAndprocesoEntrevistaToRespuesta(String idEntrevista, List<RespuestaComentarioDto> procesoEntrevista);
+
+    NotificacionDto mapNotificacionToNotificacionDto(Notificacion notificacion);
 }

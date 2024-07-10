@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.domain.model.dto;
+package com.entrevistador.generadorfeedback.domain.model;
 
 import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NotifiacionDto {
+public class Notificacion {
     private TipoNotificacionEnum tipo;
     private String mensaje;
-
 }

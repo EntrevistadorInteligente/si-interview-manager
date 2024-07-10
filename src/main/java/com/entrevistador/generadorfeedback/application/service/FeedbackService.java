@@ -8,9 +8,9 @@ import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
 import com.entrevistador.generadorfeedback.domain.model.Entrevista;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
 import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
+import com.entrevistador.generadorfeedback.domain.model.Notificacion;
 import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
 import com.entrevistador.generadorfeedback.domain.model.Respuesta;
-import com.entrevistador.generadorfeedback.domain.model.dto.NotifiacionDto;
 import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
 import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
@@ -71,7 +71,7 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
         return
                 Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(object))
                         .flatMap(jsonData ->
-                                this.notificacionesClient.enviar(userId, NotifiacionDto.builder()
+                                this.notificacionesClient.enviar(userId, Notificacion.builder()
                                                 .tipo(notificacion)
                                                 .mensaje(jsonData)
                                                 .build()
