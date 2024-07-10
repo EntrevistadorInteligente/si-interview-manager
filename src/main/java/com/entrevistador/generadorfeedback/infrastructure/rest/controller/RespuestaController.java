@@ -1,8 +1,8 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
-import com.entrevistador.generadorfeedback.domain.model.dto.ConfirmacionDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaComentarioDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.ConfirmacionDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.RespuestaComentarioDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,8 +27,9 @@ public class RespuestaController {
     @PostMapping(value = "/solicitudes-feedback/entrevistas/{idEntrevista}")
     public Mono<ResponseEntity<ConfirmacionDto>> crearSolicitudFeedback(
             @PathVariable String idEntrevista,
-            @RequestBody List<RespuestaComentarioDto> procesoEntrevista) {
-        return Mono.just(this.feedbackMapper.mapIdEntrevistaAndprocesoEntrevistaToRespuesta(idEntrevista, procesoEntrevista))
+            @RequestBody List<RespuestaComentarioDto> procesoEntrevistaDto
+    ) {
+        return Mono.just(this.feedbackMapper.mapIdEntrevistaAndprocesoEntrevistaToRespuesta(idEntrevista, procesoEntrevistaDto))
                 .flatMap(this.respuestaCreation::iniciarSolicitudFeedback)
                 .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
                         .body(ConfirmacionDto.builder().valor("Solicitud Feedback generado con exito").build())));

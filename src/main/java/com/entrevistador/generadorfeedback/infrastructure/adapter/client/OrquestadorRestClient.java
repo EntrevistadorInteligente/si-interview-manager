@@ -1,6 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.client;
 
-import com.entrevistador.generadorfeedback.domain.model.dto.IdEntrevista;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.IdEntrevista;
 import com.entrevistador.generadorfeedback.domain.model.enums.EndpointOrquestadorEnum;
 import com.entrevistador.generadorfeedback.domain.port.client.OrquestadorClient;
 import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;

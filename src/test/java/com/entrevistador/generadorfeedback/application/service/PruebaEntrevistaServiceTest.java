@@ -1,7 +1,7 @@
 package com.entrevistador.generadorfeedback.application.service;
 
 import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
-import com.entrevistador.generadorfeedback.domain.model.dto.IdEntrevista;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.IdEntrevista;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
 import com.entrevistador.generadorfeedback.domain.port.client.OrquestadorClient;
 import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;

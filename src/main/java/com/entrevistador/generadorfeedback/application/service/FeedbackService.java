@@ -32,9 +32,9 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
     private final NotificacionesClient notificacionesClient;
 
     @Override
-    public Mono<Void> guardarPreguntas(Entrevista entrevistaDto) {
-        log.info("Preguntas de entrevista id {} generadas exitosamente", entrevistaDto.getIdEntrevista());
-        return this.feedbackDao.guardarPreguntas(entrevistaDto)
+    public Mono<Void> guardarPreguntas(Entrevista entrevista) {
+        log.info("Preguntas de entrevista id {} generadas exitosamente", entrevista.getIdEntrevista());
+        return this.feedbackDao.guardarPreguntas(entrevista)
                 .flatMap(pregunta -> generarNotificacion(pregunta.getUsername(), TipoNotificacionEnum.PG,
                         pregunta.getIdEntrevista()));
     }
@@ -45,19 +45,16 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
     }
 
     @Override
-    public Mono<Void> iniciarSolicitudFeedback(Respuesta respuestaDto) {
-        return this.feedbackDao.actualizarRespuestas(respuestaDto)
+    public Mono<Void> iniciarSolicitudFeedback(Respuesta respuesta) {
+        return this.feedbackDao.actualizarRespuestas(respuesta)
                 .flatMap(this.jmsPublisherClient::enviarsolicitudFeedback);
     }
 
     @Override
-    public Mono<Void> actualizarFeedback(Feedback feedbackDto) {
-        return this.feedbackDao.actualizarFeedback(feedbackDto)
-                .flatMap(feedback ->
-                        generarNotificacion(feedback.getUsername(),
-                                TipoNotificacionEnum.FG,
-                                feedback.getIdEntrevista())
-                );
+    public Mono<Void> actualizarFeedback(Feedback feedback) {
+        return this.feedbackDao.actualizarFeedback(feedback)
+                .flatMap(fb -> generarNotificacion(fb.getUsername(), TipoNotificacionEnum.FG,
+                        fb.getIdEntrevista()));
     }
 
     @Override

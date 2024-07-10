@@ -2,8 +2,8 @@ package com.entrevistador.generadorfeedback.infrastructure.adapter.jms;
 
 import com.entrevistador.generadorfeedback.application.usescases.FeedbackCreation;
 import com.entrevistador.generadorfeedback.application.usescases.PreguntaCreation;
-import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.EntrevistaDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

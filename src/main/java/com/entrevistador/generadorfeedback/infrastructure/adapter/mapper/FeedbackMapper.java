@@ -11,13 +11,13 @@ import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrev
 import com.entrevistador.generadorfeedback.domain.model.PreguntaGenerada;
 import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import com.entrevistador.generadorfeedback.domain.model.RespuestaComentario;
-import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.NotificacionDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.PythonResponseDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaComentarioDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.EntrevistaDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.NotificacionDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PreguntaComentarioDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PythonResponseDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.RespuestaComentarioDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.EntrevistaFeedbackEntity;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.FeedbackEntity;
 import org.mapstruct.Mapper;
@@ -38,7 +38,7 @@ public interface FeedbackMapper {
     FeedbackEntity mapEntrevistaToFeedbackEntity(Entrevista entrevista);
 
     @Mapping(target = "idPregunta", expression = "java(UUID.randomUUID().toString())")
-    EntrevistaFeedbackEntity mapPreguntaToEntrevistaFeedbackEntity(PreguntaGenerada pregunta);
+    EntrevistaFeedbackEntity mapPreguntaToEntrevistaFeedbackEntity(PreguntaGenerada preguntaGenerada);
 
     @Mapping(target = "procesoEntrevista", source = "entrevista")
     Pregunta mapFeedbackEntityToPreguntaSave(FeedbackEntity feedbackEntity);
