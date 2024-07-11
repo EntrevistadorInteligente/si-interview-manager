@@ -1,7 +1,7 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.service.PruebaEntrevistaService;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackResponseDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

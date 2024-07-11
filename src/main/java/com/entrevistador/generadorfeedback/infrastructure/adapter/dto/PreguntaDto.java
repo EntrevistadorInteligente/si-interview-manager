@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.domain.model.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RespuestaDto {
+public class PreguntaDto {
     private String idEntrevista;
     private String username;
-    private List<RespuestaComentarioDto> procesoEntrevista;
+    private List<PreguntaComentarioDto> procesoEntrevista;
 }

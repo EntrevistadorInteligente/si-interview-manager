@@ -2,7 +2,7 @@ package com.entrevistador.generadorfeedback.infrastructure.adapter.jms;
 
 import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
 import com.entrevistador.generadorfeedback.domain.model.Respuesta;
-import com.entrevistador.generadorfeedback.domain.model.dto.PythonResponseDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PythonResponseDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

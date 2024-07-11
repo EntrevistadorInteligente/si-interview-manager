@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.domain.model.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
 
 import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;

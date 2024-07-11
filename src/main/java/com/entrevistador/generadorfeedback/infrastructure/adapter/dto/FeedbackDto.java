@@ -1,23 +1,21 @@
-package com.entrevistador.generadorfeedback.domain.model.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
+@Builder
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PythonResponseDto {
-
+public class FeedbackDto {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
-
+    private String username;
     @JsonProperty("proceso_entrevista")
-    private List<PythonRespuestaComentarioDto> procesoEntrevista;
-
+    private List<FeedbackComentarioDto> procesoEntrevista;
 }
