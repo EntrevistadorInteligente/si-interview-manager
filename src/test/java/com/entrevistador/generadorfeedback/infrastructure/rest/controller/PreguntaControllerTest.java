@@ -2,7 +2,7 @@ package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.PreguntaCreation;
 import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
-import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PreguntaComentarioDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
