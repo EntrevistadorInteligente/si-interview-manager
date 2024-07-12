@@ -63,20 +63,20 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
     }
 
     private Mono<Void> generarNotificacion(String userId,
-                                           TipoNotificacionEnum notificacion,
+                                           TipoNotificacionEnum tipoNotificacionEnum,
                                            Object object) {
-        return
-                Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(object))
-                        .flatMap(jsonData ->
-                                this.notificacionesClient.enviar(userId, Notificacion.builder()
-                                                .tipo(notificacion)
-                                                .mensaje(jsonData)
-                                                .build()
-                                        )
-                                        .onErrorMap(JsonProcessingException.class, e -> {
-                                            log.error("Error processing JSON", e);
-                                            return new FeedbackException("Error processing JSON");
-                                        }));
+        return Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(object))
+                .flatMap(jsonData -> {
+                    Notificacion notificacion = Notificacion.builder()
+                            .tipo(tipoNotificacionEnum)
+                            .mensaje(jsonData)
+                            .build();
+                    return this.notificacionesClient.enviar(userId, notificacion)
+                            .onErrorMap(JsonProcessingException.class, e -> {
+                                log.error("Error processing JSON", e);
+                                return new FeedbackException("Error processing JSON");
+                            });
+                });
     }
 
 }
