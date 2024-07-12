@@ -25,6 +25,11 @@ public class FeedbackMock {
                 .getResourceAsStream("mocks/feedback/FeedbackEntity.json"), FeedbackEntity.class);
     }
 
+    public FeedbackEntity getFeedbackEntityUpdated() throws IOException {
+        return this.mapper.readValue(Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("mocks/feedback/FeedbackEntityUpdated.json"), FeedbackEntity.class);
+    }
+
     public Respuesta getRespuesta() throws IOException {
         return this.mapper.readValue(Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream("mocks/feedback/Respuesta.json"), Respuesta.class);

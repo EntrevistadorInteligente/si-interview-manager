@@ -1,11 +1,11 @@
 {
-  "idEntrevista": "any",
-  "username": "any",
+  "idEntrevista": "idEntrevistaFeedback",
+  "username": "usernameFeedback",
   "procesoEntrevista": [
     {
-      "idPregunta": "any",
-      "feedback": "any",
-      "score": "any"
+      "idPregunta": "idPreguntaFeedback.0",
+      "feedback": "feedbackFeedback.0",
+      "score": "scoreFeedback.0"
     }
   ]
 }

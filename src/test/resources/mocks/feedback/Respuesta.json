@@ -1,10 +1,10 @@
 {
-  "idEntrevista": "any",
-  "username": "any",
+  "idEntrevista": "idEntrevistaRespuesta",
+  "username": "usernameRespuesta",
   "procesoEntrevista": [
     {
-      "idPregunta": "any",
-      "respuesta": "any"
+      "idPregunta": "idPreguntaRespuesta.0",
+      "respuesta": "respuesta.0"
     }
   ]
 }

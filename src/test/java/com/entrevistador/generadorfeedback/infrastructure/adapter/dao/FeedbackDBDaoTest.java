@@ -21,6 +21,7 @@ import reactor.test.StepVerifier;
 
 import java.io.IOException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -80,17 +81,21 @@ class FeedbackDBDaoTest {
     @Test
     void testActualizarFeedback() throws IOException {
         FeedbackEntity feedbackEntity = FeedbackMock.getInstance().getFeedbackEntity();
+        FeedbackEntity feedbackEntityUpdated = FeedbackMock.getInstance().getFeedbackEntityUpdated();
         Feedback feedback = FeedbackMock.getInstance().getFeedback();
 
         when(this.feedbackRepository.findByIdEntrevista(anyString())).thenReturn(Mono.just(feedbackEntity));
-        when(this.feedbackRepository.save(any())).thenReturn(Mono.just(FeedbackEntity.builder().build()));
+        when(this.feedbackRepository.save(any())).thenReturn(Mono.just(feedbackEntityUpdated));
         when(this.feedbackMapper.mapFeedbackEntityToFeedback(any())).thenReturn(feedback);
 
         Mono<Feedback> publisher = this.feedbackDBDao.actualizarFeedback(feedback);
 
         StepVerifier
                 .create(publisher)
-                .expectNext(feedback)
+                .assertNext(actualFeedback -> {
+                    assertEquals(feedbackEntityUpdated.getEntrevista().get(0).getFeedback(), actualFeedback.getProcesoEntrevista().get(0).getFeedback());
+                    assertEquals(feedbackEntityUpdated.getEntrevista().get(0).getScore(), actualFeedback.getProcesoEntrevista().get(0).getScore());
+                })
                 .verifyComplete();
 
         verify(this.feedbackRepository, times(1)).findByIdEntrevista(any());

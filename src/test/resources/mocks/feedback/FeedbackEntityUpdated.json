@@ -7,8 +7,8 @@
       "idPregunta": "idPreguntaFeedbackEntity.0",
       "pregunta": "preguntaFeedbackEntity.0",
       "respuesta": "respuestaFeedbackEntity.0",
-      "feedback": "feedbackFeedbackEntity.0",
-      "score": "scoreFeedbackEntity.0"
+      "feedback": "feedbackFeedback.0",
+      "score": "scoreFeedback.0"
     }
   ]
 }
