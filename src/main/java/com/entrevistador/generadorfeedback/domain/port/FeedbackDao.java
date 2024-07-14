@@ -1,19 +1,22 @@
 package com.entrevistador.generadorfeedback.domain.port;
 
-import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaDto;
+import com.entrevistador.generadorfeedback.domain.model.Entrevista;
+import com.entrevistador.generadorfeedback.domain.model.Feedback;
+import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
+import com.entrevistador.generadorfeedback.domain.model.Pregunta;
+import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
+import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface FeedbackDao {
+    Mono<Pregunta> guardarPreguntas(Entrevista entrevista);
 
-    Mono<PreguntaDto> guardarPreguntas(EntrevistaDto entrevistaDto);
-    Mono<RespuestaDto> actualizarRespuestas(RespuestaDto respuestaDto);
-    Mono<FeedbackDto> actualizarFeedback(FeedbackDto feedbackComentarioDto);
-    Flux<PreguntaComentarioDto> obtenerPreguntas(String entrevistaId);
-    Flux<FeedbackResponseDto> obtenerFeedback(String entrevistaId);
+    Mono<Respuesta> actualizarRespuestas(Respuesta respuesta);
+
+    Mono<Feedback> actualizarFeedback(Feedback feedback);
+
+    Flux<PreguntaComentarioEntrevista> obtenerPreguntas(String entrevistaId);
+
+    Flux<FeedbackResponse> obtenerFeedback(String entrevistaId);
 }

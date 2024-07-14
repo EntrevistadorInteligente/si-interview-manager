@@ -1,6 +1,6 @@
 package com.entrevistador.generadorfeedback.domain.port.client;
 
-import com.entrevistador.generadorfeedback.domain.model.dto.IdEntrevista;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.IdEntrevista;
 import reactor.core.publisher.Mono;
 
 public interface OrquestadorClient {

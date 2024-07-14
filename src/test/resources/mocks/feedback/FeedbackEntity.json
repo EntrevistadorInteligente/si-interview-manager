@@ -1,0 +1,14 @@
+{
+  "uuid": "uuidFeedbackEntity",
+  "idEntrevista": "idEntrevistaFeedbackEntity",
+  "username": "usernameFeedbackEntity",
+  "entrevista": [
+    {
+      "idPregunta": "idPreguntaFeedbackEntity.0",
+      "pregunta": "preguntaFeedbackEntity.0",
+      "respuesta": "respuestaFeedbackEntity.0",
+      "feedback": "feedbackFeedbackEntity.0",
+      "score": "scoreFeedbackEntity.0"
+    }
+  ]
+}

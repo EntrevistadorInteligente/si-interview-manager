@@ -18,7 +18,7 @@ public class EntrevistaFeedbackEntity {
     private String feedback;
     private String score;
 
-    public void actualzarFeedback(String feedback, String score) {
+    public void actualizarFeedback(String feedback, String score) {
         this.feedback = feedback;
         this.score = score;
     }

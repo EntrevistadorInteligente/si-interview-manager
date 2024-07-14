@@ -1,7 +1,7 @@
 package com.entrevistador.generadorfeedback.application.service;
 
 import com.entrevistador.generadorfeedback.application.usescases.PruebaEntrevista;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
 import com.entrevistador.generadorfeedback.domain.port.client.OrquestadorClient;
 import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;
@@ -18,8 +18,9 @@ public class PruebaEntrevistaService implements PruebaEntrevista {
     private final OrquestadorClient orquestadorClient;
 
     @Override
-    public Flux<FeedbackResponseDto> getPreguntas(String perfil) {
-        return orquestadorClient.getIdEntrevista(perfil).flatMapMany(idEntrevista -> pruebaEntrevistaDao.getPreguntas(idEntrevista.getId(),webFluxProperties.getLimitPreguntas()));
+    public Flux<FeedbackResponse> getPreguntas(String perfil) {
+        return orquestadorClient.getIdEntrevista(perfil)
+                .flatMapMany(idEntrevista -> pruebaEntrevistaDao.getPreguntas(idEntrevista.getId(), webFluxProperties.getLimitPreguntas()));
     }
 
 }

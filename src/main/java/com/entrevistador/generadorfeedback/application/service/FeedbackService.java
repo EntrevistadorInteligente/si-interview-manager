@@ -5,12 +5,12 @@ import com.entrevistador.generadorfeedback.application.usescases.PreguntaCreatio
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
 import com.entrevistador.generadorfeedback.domain.excepciones.FeedbackException;
 import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
-import com.entrevistador.generadorfeedback.domain.model.dto.EntrevistaDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.FeedbackResponseDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.NotifiacionDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.PreguntaComentarioDto;
-import com.entrevistador.generadorfeedback.domain.model.dto.RespuestaDto;
+import com.entrevistador.generadorfeedback.domain.model.Entrevista;
+import com.entrevistador.generadorfeedback.domain.model.Feedback;
+import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
+import com.entrevistador.generadorfeedback.domain.model.Notificacion;
+import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
+import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
 import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
@@ -32,58 +32,51 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
     private final NotificacionesClient notificacionesClient;
 
     @Override
-    public Mono<Void> guardarPreguntas(EntrevistaDto entrevistaDto) {
-        log.info("Preguntas de entrevista id {} generadas exitosamente", entrevistaDto.getIdEntrevista());
-        return this.feedbackDao.guardarPreguntas(entrevistaDto)
-                .flatMap(entrevista ->
-                        generarNotificacion(
-                                entrevista.getUsername(),
-                                TipoNotificacionEnum.PG,
-                                entrevista.getIdEntrevista())
-                );
+    public Mono<Void> guardarPreguntas(Entrevista entrevista) {
+        log.info("Preguntas de entrevista id {} generadas exitosamente", entrevista.getIdEntrevista());
+        return this.feedbackDao.guardarPreguntas(entrevista)
+                .flatMap(pregunta -> generarNotificacion(pregunta.getUsername(), TipoNotificacionEnum.PG,
+                        pregunta.getIdEntrevista()));
     }
 
     @Override
-    public Flux<PreguntaComentarioDto> obtenerPreguntas(String entrevistaId) {
+    public Flux<PreguntaComentarioEntrevista> obtenerPreguntas(String entrevistaId) {
         return this.feedbackDao.obtenerPreguntas(entrevistaId);
     }
 
     @Override
-    public Mono<Void> iniciarSolicitudFeedback(RespuestaDto respuestaDto) {
-        return this.feedbackDao.actualizarRespuestas(respuestaDto)
+    public Mono<Void> iniciarSolicitudFeedback(Respuesta respuesta) {
+        return this.feedbackDao.actualizarRespuestas(respuesta)
                 .flatMap(this.jmsPublisherClient::enviarsolicitudFeedback);
     }
 
     @Override
-    public Mono<Void> actualizarFeedback(FeedbackDto feedbackDto) {
-        return this.feedbackDao.actualizarFeedback(feedbackDto)
-                .flatMap(feedback ->
-                        generarNotificacion(feedback.getUsername(),
-                                TipoNotificacionEnum.FG,
-                                feedback.getIdEntrevista())
-                );
+    public Mono<Void> actualizarFeedback(Feedback feedback) {
+        return this.feedbackDao.actualizarFeedback(feedback)
+                .flatMap(fb -> generarNotificacion(fb.getUsername(), TipoNotificacionEnum.FG,
+                        fb.getIdEntrevista()));
     }
 
     @Override
-    public Flux<FeedbackResponseDto> obtenerFeedback(String entrevistaId) {
+    public Flux<FeedbackResponse> obtenerFeedback(String entrevistaId) {
         return this.feedbackDao.obtenerFeedback(entrevistaId);
     }
 
     private Mono<Void> generarNotificacion(String userId,
-                                          TipoNotificacionEnum notificacion,
-                                          Object object) {
-        return
-                Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(object))
-                        .flatMap(jsonData ->
-                                this.notificacionesClient.enviar(userId, NotifiacionDto.builder()
-                                        .tipo(notificacion)
-                                        .mensaje(jsonData)
-                                        .build()
-                                )
-                                        .onErrorMap(JsonProcessingException.class, e -> {
-                                            log.error("Error processing JSON", e);
-                                            return new FeedbackException("Error processing JSON");
-                                        }));
+                                           TipoNotificacionEnum tipoNotificacionEnum,
+                                           Object object) {
+        return Mono.fromCallable(() -> new ObjectMapper().writeValueAsString(object))
+                .flatMap(jsonData -> {
+                    Notificacion notificacion = Notificacion.builder()
+                            .tipo(tipoNotificacionEnum)
+                            .mensaje(jsonData)
+                            .build();
+                    return this.notificacionesClient.enviar(userId, notificacion)
+                            .onErrorMap(JsonProcessingException.class, e -> {
+                                log.error("Error processing JSON", e);
+                                return new FeedbackException("Error processing JSON");
+                            });
+                });
     }
 
 }
