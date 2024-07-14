@@ -33,7 +33,8 @@ public interface FeedbackMapper {
 
     PythonResponseDto mapRespuestaToPythonResponseDto(Respuesta respuesta);
 
-    @Mapping(target = "username", source = "idEntrevista")
+    @Mapping(target = "idEntrevista", source = "idEntrevista")
+    @Mapping(target = "username", source = "username")
     @Mapping(target = "entrevista", source = "preguntas")
     FeedbackEntity mapEntrevistaToFeedbackEntity(Entrevista entrevista);
 
