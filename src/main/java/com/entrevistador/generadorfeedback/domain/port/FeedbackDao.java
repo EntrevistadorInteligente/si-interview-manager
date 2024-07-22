@@ -10,6 +10,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface FeedbackDao {
+    Mono<Feedback> obtenerFeedback(String entrevistaId);
+
     Mono<Pregunta> guardarPreguntas(Entrevista entrevista);
 
     Mono<Respuesta> actualizarRespuestas(Respuesta respuesta);
@@ -18,5 +20,5 @@ public interface FeedbackDao {
 
     Flux<PreguntaComentarioEntrevista> obtenerPreguntas(String entrevistaId);
 
-    Flux<FeedbackResponse> obtenerFeedback(String entrevistaId);
+    Flux<FeedbackResponse> obtenerEntrevistaFeedback(String entrevistaId);
 }

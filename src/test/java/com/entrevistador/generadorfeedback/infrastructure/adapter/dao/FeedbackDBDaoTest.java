@@ -123,14 +123,14 @@ class FeedbackDBDaoTest {
     }
 
     @Test
-    void testObtenerFeedback() throws IOException {
+    void testObtenerEntrevistaFeedback() throws IOException {
         FeedbackEntity feedbackEntity = FeedbackMock.getInstance().getFeedbackEntity();
         FeedbackResponse feedbackResponse = FeedbackResponse.builder().build();
 
         when(this.feedbackRepository.findByIdEntrevista(anyString())).thenReturn(Mono.just(feedbackEntity));
         when(this.feedbackMapper.mapEntrevistaFeedbackEntityToFeedbackResponse(any())).thenReturn(feedbackResponse);
 
-        Flux<FeedbackResponse> publisher = this.feedbackDBDao.obtenerFeedback("any");
+        Flux<FeedbackResponse> publisher = this.feedbackDBDao.obtenerEntrevistaFeedback("any");
 
         StepVerifier.
                 create(publisher)
