@@ -47,7 +47,7 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
     @Override
     public Mono<Void> iniciarSolicitudFeedback(Respuesta respuesta) {
         return this.feedbackDao.obtenerFeedback(respuesta.getIdEntrevista())
-                .flatMap(Feedback::validateInterviewProcess)
+                .flatMap(Feedback::validateFeedbackProcess)
                 .flatMap(unused -> this.feedbackDao.actualizarRespuestas(respuesta))
                 .flatMap(this.jmsPublisherClient::enviarsolicitudFeedback);
     }

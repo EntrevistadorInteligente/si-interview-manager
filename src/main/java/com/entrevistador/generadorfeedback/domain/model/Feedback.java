@@ -20,7 +20,7 @@ public class Feedback {
     private TipoNotificacionEnum feedbackProcess;
     private List<FeedbackComentario> procesoEntrevista;
 
-    public Mono<Feedback> validateInterviewProcess() {
+    public Mono<Feedback> validateFeedbackProcess() {
         if (this.feedbackProcess == TipoNotificacionEnum.FG) {
             return Mono.error(new FeedbackProcessStatusException("You already have feedback generated"));
         }
