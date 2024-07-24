@@ -5,9 +5,10 @@ import lombok.Getter;
 @Getter
 public enum TipoNotificacionEnum {
     PG("PREGUNTAS_GENERADAS"),
-    FG("FEEDBACK_GENERADAS");
+    FG("FEEDBACK_GENERADAS"),
+    GF("GENERANDO_FEEDBACK");
 
-    private String descripcion;
+    private final String descripcion;
 
     TipoNotificacionEnum(String descripcion) {
         this.descripcion = descripcion;

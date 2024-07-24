@@ -1,5 +1,6 @@
 package com.entrevistador.generadorfeedback.application.service;
 
+import com.entrevistador.generadorfeedback.domain.exception.FeedbackProcessStatusException;
 import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
 import com.entrevistador.generadorfeedback.domain.model.Entrevista;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
@@ -8,6 +9,7 @@ import com.entrevistador.generadorfeedback.domain.model.Notificacion;
 import com.entrevistador.generadorfeedback.domain.model.Pregunta;
 import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
 import com.entrevistador.generadorfeedback.domain.model.Respuesta;
+import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
 import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
 import org.junit.jupiter.api.Test;
@@ -69,17 +71,39 @@ class FeedbackServiceTest {
 
     @Test
     void testIniciarSolicitudFeedback() {
+        Feedback feedback = Feedback.builder().feedbackProcess(TipoNotificacionEnum.GF).build();
+
+        when(this.feedbackDao.obtenerFeedback(anyString())).thenReturn(Mono.just(feedback));
         when(this.feedbackDao.actualizarRespuestas(any())).thenReturn(Mono.just(Respuesta.builder().build()));
         when(this.jmsPublisherClient.enviarsolicitudFeedback(any())).thenReturn(Mono.empty());
 
-        Mono<Void> publisher = this.feedbackService.iniciarSolicitudFeedback(Respuesta.builder().build());
+        Mono<Void> publisher = this.feedbackService.iniciarSolicitudFeedback(Respuesta.builder().idEntrevista("any").build());
 
         StepVerifier
                 .create(publisher)
                 .verifyComplete();
 
+        verify(this.feedbackDao, times(1)).obtenerFeedback(anyString());
         verify(this.feedbackDao, times(1)).actualizarRespuestas(any());
         verify(this.jmsPublisherClient, times(1)).enviarsolicitudFeedback(any());
+    }
+
+    @Test
+    void testIniciarSolicitudFeedbackException() {
+        Feedback feedback = Feedback.builder().feedbackProcess(TipoNotificacionEnum.FG).build();
+
+        when(this.feedbackDao.obtenerFeedback(anyString())).thenReturn(Mono.just(feedback));
+
+        Mono<Void> publisher = this.feedbackService.iniciarSolicitudFeedback(Respuesta.builder().idEntrevista("any").build());
+
+        StepVerifier
+                .create(publisher)
+                .expectError(FeedbackProcessStatusException.class)
+                .verify();
+
+        verify(this.feedbackDao, times(1)).obtenerFeedback(anyString());
+        verify(this.feedbackDao, times(0)).actualizarRespuestas(any());
+        verify(this.jmsPublisherClient, times(0)).enviarsolicitudFeedback(any());
     }
 
     @Test
@@ -104,7 +128,7 @@ class FeedbackServiceTest {
     @Test
     void testObtenerFeedback() {
         FeedbackResponse feedbackResponse = FeedbackResponse.builder().build();
-        when(this.feedbackDao.obtenerFeedback(anyString())).thenReturn(Flux.just(feedbackResponse));
+        when(this.feedbackDao.obtenerEntrevistaFeedback(anyString())).thenReturn(Flux.just(feedbackResponse));
 
         Flux<FeedbackResponse> publisher = this.feedbackService.obtenerFeedback("any");
 
@@ -113,6 +137,6 @@ class FeedbackServiceTest {
                 .expectNext(feedbackResponse)
                 .verifyComplete();
 
-        verify(this.feedbackDao, times(1)).obtenerFeedback(anyString());
+        verify(this.feedbackDao, times(1)).obtenerEntrevistaFeedback(anyString());
     }
 }

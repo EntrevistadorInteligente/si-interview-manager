@@ -1,6 +1,7 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
+import com.entrevistador.generadorfeedback.domain.exception.FeedbackProcessStatusException;
 import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.ConfirmacionDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.RespuestaComentarioDto;
@@ -48,6 +49,25 @@ class RespuestaControllerTest {
                 .isCreated()
                 .expectBody(ConfirmacionDto.class)
                 .value(ConfirmacionDto::getValor, equalTo("Solicitud Feedback generado con exito"));
+    }
+
+    @Test
+    void testCrearSolicitudFeedback_FeedbackProcessStatusException() {
+        RespuestaComentarioDto respuestaComentarioDto = RespuestaComentarioDto.builder().build();
+
+        when(this.feedbackMapper.mapIdEntrevistaAndprocesoEntrevistaToRespuesta(anyString(), anyList())).thenReturn(Respuesta.builder().build());
+        when(this.respuestaCreation.iniciarSolicitudFeedback(any())).thenReturn(Mono.error(new FeedbackProcessStatusException("error")));
+
+        this.webTestClient
+                .post()
+                .uri(URL.append("/solicitudes-feedback/entrevistas/{idEntrevista}").toString(), 1)
+                .body(Flux.just(respuestaComentarioDto), RespuestaComentarioDto.class)
+                .exchange()
+                .expectStatus()
+                .isBadRequest()
+                .expectBody(String.class)
+                .isEqualTo("error");
+
     }
 
 }

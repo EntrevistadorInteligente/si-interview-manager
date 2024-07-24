@@ -3,7 +3,7 @@ package com.entrevistador.generadorfeedback.application.service;
 import com.entrevistador.generadorfeedback.application.usescases.FeedbackCreation;
 import com.entrevistador.generadorfeedback.application.usescases.PreguntaCreation;
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
-import com.entrevistador.generadorfeedback.domain.excepciones.FeedbackException;
+import com.entrevistador.generadorfeedback.domain.exception.FeedbackException;
 import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
 import com.entrevistador.generadorfeedback.domain.model.Entrevista;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
@@ -46,7 +46,9 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
 
     @Override
     public Mono<Void> iniciarSolicitudFeedback(Respuesta respuesta) {
-        return this.feedbackDao.actualizarRespuestas(respuesta)
+        return this.feedbackDao.obtenerFeedback(respuesta.getIdEntrevista())
+                .flatMap(Feedback::validateFeedbackProcess)
+                .flatMap(unused -> this.feedbackDao.actualizarRespuestas(respuesta))
                 .flatMap(this.jmsPublisherClient::enviarsolicitudFeedback);
     }
 
@@ -59,7 +61,7 @@ public class FeedbackService implements FeedbackCreation, PreguntaCreation, Resp
 
     @Override
     public Flux<FeedbackResponse> obtenerFeedback(String entrevistaId) {
-        return this.feedbackDao.obtenerFeedback(entrevistaId);
+        return this.feedbackDao.obtenerEntrevistaFeedback(entrevistaId);
     }
 
     private Mono<Void> generarNotificacion(String userId,

@@ -1,5 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.entity;
 
+import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,5 +22,6 @@ public class FeedbackEntity {
     private String uuid;
     private String idEntrevista;
     private String username;
+    private TipoNotificacionEnum feedbackProcess;
     private List<EntrevistaFeedbackEntity> entrevista;
 }
