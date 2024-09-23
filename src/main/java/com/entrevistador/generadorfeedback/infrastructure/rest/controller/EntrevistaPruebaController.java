@@ -30,8 +30,7 @@ public class EntrevistaPruebaController {
 
     @PostMapping(path = "/entrevistas")
     public Flux<PruebaEntrevistaDto> guardarEntrevistas(@RequestBody List<PruebaEntrevistaDto> entrevistas) {
-        return entrevistas
-                .stream().map(this.feedbackMapper::mapPruebaEntrevistaDtoToPruebaEntrevistaRequest)
+        return Flux.fromIterable(entrevistas).map(this.feedbackMapper::mapPruebaEntrevistaDtoToPruebaEntrevistaRequest)
                 .flatMap(this.pruebaEntrevistaService::guardarEntrevista)
                 .map(this.feedbackMapper::mapPruebaEntrevistaResponseToPruebaEntrevistaDto);
     }
