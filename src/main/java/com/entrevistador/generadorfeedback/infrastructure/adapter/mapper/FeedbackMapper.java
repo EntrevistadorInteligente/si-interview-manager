@@ -1,23 +1,8 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.mapper;
 
-import com.entrevistador.generadorfeedback.domain.model.Entrevista;
-import com.entrevistador.generadorfeedback.domain.model.Feedback;
-import com.entrevistador.generadorfeedback.domain.model.FeedbackComentario;
-import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
-import com.entrevistador.generadorfeedback.domain.model.Notificacion;
-import com.entrevistador.generadorfeedback.domain.model.Pregunta;
-import com.entrevistador.generadorfeedback.domain.model.PreguntaComentario;
-import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
-import com.entrevistador.generadorfeedback.domain.model.PreguntaGenerada;
-import com.entrevistador.generadorfeedback.domain.model.Respuesta;
-import com.entrevistador.generadorfeedback.domain.model.RespuestaComentario;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.EntrevistaDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackResponseDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.NotificacionDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PreguntaComentarioDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PythonResponseDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.RespuestaComentarioDto;
+import com.entrevistador.generadorfeedback.domain.model.*;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.*;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.EntrevistaFeedbackEntity;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.FeedbackEntity;
 import org.mapstruct.Mapper;
@@ -66,7 +51,9 @@ public interface FeedbackMapper {
 
     FeedbackResponseDto mapFeedbackResponseToFeedbackResponseDto(FeedbackResponse feedbackResponse);
 
-    FeedbackResponse mapEntrevistaFeedbackEntityToFeedbackResponseDto(EntrevistaFeedbackEntity entrevistaFeedbackEntity);
+    PruebaEntrevistaDto mapPruebaEntrevistaResponseToPruebaEntrevistaDto(PruebaEntrevistaResponse feedbackResponse);
+
+    PruebaEntrevistaResponse mapEntrevistaEntityToPruebaEntrevistaResponse(EntrevistaEntity entrevistaFeedbackEntity);
 
     PreguntaComentarioDto mapPreguntaComentarioEntrevistaToPreguntaComentarioDto(PreguntaComentarioEntrevista preguntaComentarioEntrevista);
 
@@ -75,4 +62,7 @@ public interface FeedbackMapper {
     Respuesta mapIdEntrevistaAndprocesoEntrevistaToRespuesta(String idEntrevista, List<RespuestaComentarioDto> procesoEntrevista);
 
     NotificacionDto mapNotificacionToNotificacionDto(Notificacion notificacion);
+
+    PruebaEntrevistaRequest mapPruebaEntrevistaDtoToPruebaEntrevistaRequest(PruebaEntrevistaDto dto);
+    EntrevistaEntity mapPruebaEntrevistaRequestToEntrevistaEntity(PruebaEntrevistaRequest request);
 }

@@ -1,6 +1,6 @@
 package com.entrevistador.generadorfeedback.application.service;
 
-import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
+import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevistaResponse;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.IdEntrevista;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
 import com.entrevistador.generadorfeedback.domain.port.client.OrquestadorClient;
@@ -11,12 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -29,36 +26,24 @@ class PruebaEntrevistaServiceTest {
     private PruebaEntrevistaService pruebaEntrevistaService;
     @Mock
     private PruebaEntrevistaDao pruebaEntrevistaDao;
-    @Mock
-    private OrquestadorClient orquestadorClient;
-
 
     @BeforeEach
     public void setUp() {
-        WebFluxProperties entrevistaPruebaPorperties = mock(WebFluxProperties.class);
-        when(entrevistaPruebaPorperties.getLimitPreguntas()).thenReturn(10);
-        ReflectionTestUtils.setField(pruebaEntrevistaService, "webFluxProperties", entrevistaPruebaPorperties);
-
     }
 
     @Test
     void shouldGetPreguntasWhenValidRequest() {
-        FeedbackResponse soloPreguntaImp = new FeedbackResponse("", "", "", "");
-        when(this.pruebaEntrevistaDao.getPreguntas(anyString(), anyInt())).thenReturn(Flux.just(soloPreguntaImp));
-        when(this.pruebaEntrevistaDao.getPreguntas(anyString(), anyInt())).thenReturn(Flux.just(soloPreguntaImp));
-        when(this.orquestadorClient.getIdEntrevista(anyString()))
-                .thenReturn(Mono.just(new IdEntrevista(anyString())));
+        PruebaEntrevistaResponse soloPreguntaImp = new PruebaEntrevistaResponse("", "");
+        when(this.pruebaEntrevistaDao.getPreguntas(anyString())).thenReturn(Flux.just(soloPreguntaImp));
 
-
-        Flux<FeedbackResponse> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
+        Flux<PruebaEntrevistaResponse> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
 
         StepVerifier
                 .create(publisher)
                 .expectNext(soloPreguntaImp)
                 .verifyComplete();
 
-        verify(this.pruebaEntrevistaDao, times(1)).getPreguntas(anyString(), anyInt());
+        verify(this.pruebaEntrevistaDao, times(1)).getPreguntas(anyString());
     }
-
 
 }

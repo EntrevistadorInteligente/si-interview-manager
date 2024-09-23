@@ -1,9 +1,9 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.dao;
 
-import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.EntrevistaFeedbackEntity;
+import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevistaResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
-import com.entrevistador.generadorfeedback.infrastructure.repositoy.FeedbackRepository;
+import com.entrevistador.generadorfeedback.infrastructure.repositoy.EntrevistaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,7 +13,6 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -24,26 +23,26 @@ class PruebaEntrevistaDBDaoTest {
     @InjectMocks
     private PruebaEntrevistaDBDao pruebaEntrevistaDBDao;
     @Mock
-    private FeedbackRepository feedbackRepository;
+    private EntrevistaRepository entrevistaRepository;
     @Mock
     private FeedbackMapper feedbackMapper;
 
     @Test
     void testGetPreguntas() {
-        FeedbackResponse feedbackResponse = FeedbackResponse.builder().build();
+        PruebaEntrevistaResponse feedbackResponse = PruebaEntrevistaResponse.builder().build();
 
-        when(this.feedbackRepository.obtenerPreguntas(anyString(), anyInt()))
-                .thenReturn(Flux.just(EntrevistaFeedbackEntity.builder().build()));
-        when(this.feedbackMapper.mapEntrevistaFeedbackEntityToFeedbackResponseDto(any())).thenReturn(feedbackResponse);
+        when(this.entrevistaRepository.findAllByRol(anyString()))
+                .thenReturn(Flux.just(EntrevistaEntity.builder().build()));
+        when(this.feedbackMapper.mapEntrevistaEntityToPruebaEntrevistaResponse(any())).thenReturn(feedbackResponse);
 
-        Flux<FeedbackResponse> publisher = this.pruebaEntrevistaDBDao.getPreguntas("any", 1);
+        Flux<PruebaEntrevistaResponse> publisher = this.pruebaEntrevistaDBDao.getPreguntas("any");
 
         StepVerifier
                 .create(publisher)
                 .expectNext(feedbackResponse)
                 .verifyComplete();
 
-        verify(this.feedbackRepository, times(1)).obtenerPreguntas(anyString(), anyInt());
-        verify(this.feedbackMapper, times(1)).mapEntrevistaFeedbackEntityToFeedbackResponseDto(any());
+        verify(this.entrevistaRepository, times(1)).findAllByRol(anyString());
+        verify(this.feedbackMapper, times(1)).mapEntrevistaEntityToPruebaEntrevistaResponse(any());
     }
 }
