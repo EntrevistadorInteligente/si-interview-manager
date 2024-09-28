@@ -38,7 +38,7 @@ class FeedbackDBDaoTest {
     private FeedbackMapper feedbackMapper;
 
     @Test
-    void testguardarPreguntas() {
+    void testGuardarPreguntas() {
         Pregunta pregunta = Pregunta.builder().build();
 
         when(this.feedbackMapper.mapEntrevistaToFeedbackEntity(any())).thenReturn(FeedbackEntity.builder().build());

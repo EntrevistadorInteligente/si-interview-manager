@@ -1,8 +1,7 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.service.PruebaEntrevistaService;
-import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackResponseDto;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PruebaEntrevistaDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 @WebFluxTest(controllers = {EntrevistaPruebaController.class})
 class EntrevistaPruebaControllerTest {
-    private final StringBuilder URL = new StringBuilder("/v1/muestra");
+    private final StringBuilder URL = new StringBuilder("/v1/demos");
 
     @Autowired
     private WebTestClient webTestClient;
@@ -29,14 +28,14 @@ class EntrevistaPruebaControllerTest {
 
     @Test
     void testObtenerPreguntas_Get() {
-        when(this.interviewTestService.getPreguntas(anyString())).thenReturn(Flux.just(FeedbackResponse.builder().build()));
-        when(this.feedbackMapper.mapFeedbackResponseToFeedbackResponseDto(any())).thenReturn(FeedbackResponseDto.builder().build());
+        when(this.interviewTestService.getPreguntas(anyString())).thenReturn(Flux.just(PruebaEntrevistaResponse.builder().build()));
+        when(this.feedbackMapper.mapPruebaEntrevistaResponseToPruebaEntrevistaDto(any())).thenReturn(PruebaEntrevistaDto.builder().build());
 
         this.webTestClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
                         .path(URL.append("/preguntas").toString())
-                        .queryParam("perfil", "any")
+                        .queryParam("rol", "any")
                         .build())
                 .exchange()
                 .expectStatus()

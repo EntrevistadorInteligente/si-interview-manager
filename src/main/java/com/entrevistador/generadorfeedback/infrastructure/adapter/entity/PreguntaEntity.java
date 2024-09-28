@@ -1,15 +1,15 @@
-package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class PreguntaDto {
+@NoArgsConstructor
+@Builder
+public class PreguntaEntity {
     private String descripcion;
     private String titulo;
 }
