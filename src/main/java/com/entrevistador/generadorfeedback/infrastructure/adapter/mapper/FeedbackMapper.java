@@ -51,9 +51,9 @@ public interface FeedbackMapper {
 
     FeedbackResponseDto mapFeedbackResponseToFeedbackResponseDto(FeedbackResponse feedbackResponse);
 
-    PruebaEntrevistaDto mapPruebaEntrevistaResponseToPruebaEntrevistaDto(PruebaEntrevistaResponse feedbackResponse);
+    PruebaEntrevistaDto mapPruebaEntrevistaResponseToPruebaEntrevistaDto(PruebaEntrevista feedbackResponse);
 
-    PruebaEntrevistaResponse mapEntrevistaEntityToPruebaEntrevistaResponse(EntrevistaEntity entrevistaFeedbackEntity);
+    PruebaEntrevista mapEntrevistaEntityToPruebaEntrevistaResponse(EntrevistaEntity entrevistaFeedbackEntity);
 
     PreguntaComentarioDto mapPreguntaComentarioEntrevistaToPreguntaComentarioDto(PreguntaComentarioEntrevista preguntaComentarioEntrevista);
 
@@ -63,6 +63,6 @@ public interface FeedbackMapper {
 
     NotificacionDto mapNotificacionToNotificacionDto(Notificacion notificacion);
 
-    PruebaEntrevistaRequest mapPruebaEntrevistaDtoToPruebaEntrevistaRequest(PruebaEntrevistaDto dto);
-    EntrevistaEntity mapPruebaEntrevistaRequestToEntrevistaEntity(PruebaEntrevistaRequest request);
+    PruebaEntrevista mapPruebaEntrevistaDtoToPruebaEntrevistaRequest(PruebaEntrevistaDto dto);
+    EntrevistaEntity mapPruebaEntrevistaRequestToEntrevistaEntity(PruebaEntrevista request);
 }

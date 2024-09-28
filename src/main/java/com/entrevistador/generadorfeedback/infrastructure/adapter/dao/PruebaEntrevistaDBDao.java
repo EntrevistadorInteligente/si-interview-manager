@@ -1,7 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.dao;
 
-import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevistaRequest;
-import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevistaResponse;
+import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevista;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
@@ -20,13 +19,13 @@ public class PruebaEntrevistaDBDao implements PruebaEntrevistaDao {
     private final FeedbackMapper feedbackMapper;
 
     @Override
-    public Flux<PruebaEntrevistaResponse> getPreguntas(String rol) {
+    public Flux<PruebaEntrevista> getPreguntas(String rol) {
         return this.entrevistaRepository.findAllByRol(rol)
                 .map(this.feedbackMapper::mapEntrevistaEntityToPruebaEntrevistaResponse);
     }
 
     @Override
-    public Mono<PruebaEntrevistaResponse> guardarEntrevista(PruebaEntrevistaRequest request) {
+    public Mono<PruebaEntrevista> guardarEntrevista(PruebaEntrevista request) {
         EntrevistaEntity entity = this.feedbackMapper.mapPruebaEntrevistaRequestToEntrevistaEntity(request);
         return this.entrevistaRepository.save(entity)
                 .map(this.feedbackMapper::mapEntrevistaEntityToPruebaEntrevistaResponse);

@@ -1,6 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.dao;
 
-import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevistaResponse;
+import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevista;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.EntrevistaEntity;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import com.entrevistador.generadorfeedback.infrastructure.repositoy.EntrevistaRepository;
@@ -29,13 +29,13 @@ class PruebaEntrevistaDBDaoTest {
 
     @Test
     void testGetPreguntas() {
-        PruebaEntrevistaResponse feedbackResponse = PruebaEntrevistaResponse.builder().build();
+        PruebaEntrevista feedbackResponse = PruebaEntrevista.builder().build();
 
         when(this.entrevistaRepository.findAllByRol(anyString()))
                 .thenReturn(Flux.just(EntrevistaEntity.builder().build()));
         when(this.feedbackMapper.mapEntrevistaEntityToPruebaEntrevistaResponse(any())).thenReturn(feedbackResponse);
 
-        Flux<PruebaEntrevistaResponse> publisher = this.pruebaEntrevistaDBDao.getPreguntas("any");
+        Flux<PruebaEntrevista> publisher = this.pruebaEntrevistaDBDao.getPreguntas("any");
 
         StepVerifier
                 .create(publisher)

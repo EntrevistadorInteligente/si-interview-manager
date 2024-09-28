@@ -1,10 +1,6 @@
 package com.entrevistador.generadorfeedback.application.service;
 
-import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevistaResponse;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.IdEntrevista;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
-import com.entrevistador.generadorfeedback.domain.port.client.OrquestadorClient;
-import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

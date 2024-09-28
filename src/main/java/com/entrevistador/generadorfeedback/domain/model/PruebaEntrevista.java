@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PruebaEntrevistaRequest {
+public class PruebaEntrevista {
     private String nombreEmpresa;
     private String tituloVacante;
     private String descripcionEntrevista;

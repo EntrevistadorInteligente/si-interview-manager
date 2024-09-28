@@ -1,9 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.service.PruebaEntrevistaService;
-import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
-import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevistaResponse;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackResponseDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PruebaEntrevistaDto;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
 import org.junit.jupiter.api.Test;
