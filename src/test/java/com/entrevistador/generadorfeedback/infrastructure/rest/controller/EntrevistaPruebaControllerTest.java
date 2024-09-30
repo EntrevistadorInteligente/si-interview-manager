@@ -1,8 +1,9 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.service.PruebaEntrevistaService;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PruebaEntrevistaDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevista;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.PruebaEntrevistaResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.EntrevistaPruebaMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -24,12 +25,13 @@ class EntrevistaPruebaControllerTest {
     @MockBean
     private PruebaEntrevistaService interviewTestService;
     @MockBean
-    private FeedbackMapper feedbackMapper;
+    private EntrevistaPruebaMapper entrevistaPruebaMapper;
 
     @Test
     void testObtenerPreguntas_Get() {
-        when(this.interviewTestService.getPreguntas(anyString())).thenReturn(Flux.just(PruebaEntrevistaResponse.builder().build()));
-        when(this.feedbackMapper.mapPruebaEntrevistaResponseToPruebaEntrevistaDto(any())).thenReturn(PruebaEntrevistaDto.builder().build());
+        when(this.interviewTestService.getPreguntas(anyString())).thenReturn(Flux.just(PruebaEntrevista.builder().build()));
+        when(this.entrevistaPruebaMapper.mapOutPruebaEntrevistaToPruebaEntrevistaResponse(any()))
+                .thenReturn(PruebaEntrevistaResponse.builder().build());
 
         this.webTestClient
                 .get()

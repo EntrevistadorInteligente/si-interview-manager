@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface PruebaEntrevistaDao {
     Flux<PruebaEntrevista> getPreguntas(String rol);
-    Mono<PruebaEntrevista> guardarEntrevista(PruebaEntrevista request);
+    Mono<PruebaEntrevista> guardarEntrevista(PruebaEntrevista pruebaEntrevista);
 }

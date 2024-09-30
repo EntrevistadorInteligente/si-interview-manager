@@ -1,9 +1,9 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.PreguntaCreation;
-import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PreguntaComentarioDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.domain.model.EntrevistaFeedback;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.PreguntaComentarioResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.FeedbackMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -29,8 +29,10 @@ class PreguntaControllerTest {
 
     @Test
     void obtenerPreguntas() {
-        when(this.preguntaCreation.obtenerPreguntas(anyString())).thenReturn(Flux.just(PreguntaComentarioEntrevista.builder().build()));
-        when(this.feedbackMapper.mapPreguntaComentarioEntrevistaToPreguntaComentarioDto(any())).thenReturn(PreguntaComentarioDto.builder().build());
+        when(this.preguntaCreation.obtenerPreguntas(anyString()))
+                .thenReturn(Flux.just(EntrevistaFeedback.builder().build()));
+        when(this.feedbackMapper.mapOutEntrevistaFeedbackToPreguntaComentarioResponse(any()))
+                .thenReturn(PreguntaComentarioResponse.builder().build());
 
         this.webTestClient
                 .get()

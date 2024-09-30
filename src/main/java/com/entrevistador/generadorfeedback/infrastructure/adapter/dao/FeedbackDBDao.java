@@ -1,16 +1,12 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.dao;
 
 import com.entrevistador.generadorfeedback.domain.exception.FeedbackException;
-import com.entrevistador.generadorfeedback.domain.model.Entrevista;
+import com.entrevistador.generadorfeedback.domain.model.EntrevistaFeedback;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
-import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
-import com.entrevistador.generadorfeedback.domain.model.Pregunta;
-import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
-import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.FeedbackEntity;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.out.FeedbackDBMapper;
 import com.entrevistador.generadorfeedback.infrastructure.repositoy.FeedbackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -21,27 +17,27 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class FeedbackDBDao implements FeedbackDao {
     private final FeedbackRepository feedbackRepository;
-    private final FeedbackMapper feedbackMapper;
+    private final FeedbackDBMapper feedbackDBMapper;
 
     @Override
     public Mono<Feedback> obtenerFeedback(String entrevistaId) {
         return this.feedbackRepository.findByIdEntrevista(entrevistaId)
-                .map(this.feedbackMapper::mapFeedbackEntityToFeedback);
+                .map(this.feedbackDBMapper::mapOutFeedbackEntityToFeedback);
     }
 
     @Override
-    public Mono<Pregunta> guardarPreguntas(Entrevista entrevista) {
-        return Mono.just(this.feedbackMapper.mapEntrevistaToFeedbackEntity(entrevista))
+    public Mono<Feedback> guardarPreguntas(Feedback feedback) {
+        return Mono.just(this.feedbackDBMapper.mapInFeedbackToFeedbackEntity(feedback))
                 .flatMap(this.feedbackRepository::save)
-                .map(this.feedbackMapper::mapFeedbackEntityToPreguntaSave);
+                .map(this.feedbackDBMapper::mapOutFeedbackEntityToFeedback);
     }
 
     @Override
-    public Mono<Respuesta> actualizarRespuestas(Respuesta respuesta) {
-        return this.feedbackRepository.findByIdEntrevista(respuesta.getIdEntrevista())
-                .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + respuesta.getIdEntrevista())))
+    public Mono<Feedback> actualizarRespuestas(Feedback feedback) {
+        return this.feedbackRepository.findByIdEntrevista(feedback.getIdEntrevista())
+                .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + feedback.getIdEntrevista())))
                 .flatMap(feedbackEntity -> {
-                    respuesta.getProcesoEntrevista().forEach(respuestaComentario -> feedbackEntity.getEntrevista()
+                    feedback.getProcesoEntrevista().forEach(respuestaComentario -> feedbackEntity.getEntrevista()
                             .stream()
                             .filter(efb -> efb.getIdPregunta().equals(respuestaComentario.getIdPregunta()))
                             .findFirst()
@@ -49,7 +45,7 @@ public class FeedbackDBDao implements FeedbackDao {
                     feedbackEntity.setFeedbackProcess(TipoNotificacionEnum.GF);
                     return this.feedbackRepository.save(feedbackEntity);
                 })
-                .map(this.feedbackMapper::mapFeedbackEntityToRespuesta);
+                .map(this.feedbackDBMapper::mapOutFeedbackEntityToFeedback);
     }
 
     @Override
@@ -65,25 +61,25 @@ public class FeedbackDBDao implements FeedbackDao {
                                     feedbackComentario.getScore())));
                     return this.feedbackRepository.save(feedbackEntity);
                 })
-                .map(this.feedbackMapper::mapFeedbackEntityToFeedback);
+                .map(this.feedbackDBMapper::mapOutFeedbackEntityToFeedback);
     }
 
     @Override
-    public Flux<PreguntaComentarioEntrevista> obtenerPreguntas(String entrevistaId) {
+    public Flux<EntrevistaFeedback> obtenerPreguntas(String entrevistaId) {
         return this.feedbackRepository.findByIdEntrevista(entrevistaId)
                 .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + entrevistaId)))
                 .map(FeedbackEntity::getEntrevista)
                 .flatMapMany(Flux::fromIterable)
-                .map(this.feedbackMapper::mapEntrevistaFeedbackEntityToPreguntaComentario);
+                .map(this.feedbackDBMapper::mapOutEntrevistaFeedbackEntityToEntrevistaFeedback);
     }
 
     @Override
-    public Flux<FeedbackResponse> obtenerEntrevistaFeedback(String entrevistaId) {
+    public Flux<EntrevistaFeedback> obtenerEntrevistaFeedback(String entrevistaId) {
         return this.feedbackRepository.findByIdEntrevista(entrevistaId)
                 .switchIfEmpty(Mono.error(new FeedbackException("Id de estado no encontrado. ID: " + entrevistaId)))
                 .map(FeedbackEntity::getEntrevista)
                 .flatMapMany(Flux::fromIterable)
-                .map(this.feedbackMapper::mapEntrevistaFeedbackEntityToFeedbackResponse);
+                .map(this.feedbackDBMapper::mapOutEntrevistaFeedbackEntityToEntrevistaFeedback);
     }
 
 }

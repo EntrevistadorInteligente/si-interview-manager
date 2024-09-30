@@ -1,13 +1,9 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.dao;
 
-import com.entrevistador.generadorfeedback.domain.model.Entrevista;
+import com.entrevistador.generadorfeedback.domain.model.EntrevistaFeedback;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
-import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
-import com.entrevistador.generadorfeedback.domain.model.Pregunta;
-import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
-import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.FeedbackEntity;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.out.FeedbackDBMapper;
 import com.entrevistador.generadorfeedback.infrastructure.repositoy.FeedbackRepository;
 import com.entrevistador.generadorfeedback.utils.FeedbackMock;
 import org.junit.jupiter.api.Test;
@@ -35,47 +31,47 @@ class FeedbackDBDaoTest {
     @Mock
     private FeedbackRepository feedbackRepository;
     @Mock
-    private FeedbackMapper feedbackMapper;
+    private FeedbackDBMapper feedbackDBMapper;
 
     @Test
     void testGuardarPreguntas() {
-        Pregunta pregunta = Pregunta.builder().build();
+        Feedback feedback = Feedback.builder().build();
 
-        when(this.feedbackMapper.mapEntrevistaToFeedbackEntity(any())).thenReturn(FeedbackEntity.builder().build());
+        when(this.feedbackDBMapper.mapInFeedbackToFeedbackEntity(any())).thenReturn(FeedbackEntity.builder().build());
         when(this.feedbackRepository.save(any())).thenReturn(Mono.just(FeedbackEntity.builder().build()));
-        when(this.feedbackMapper.mapFeedbackEntityToPreguntaSave(any())).thenReturn(pregunta);
+        when(this.feedbackDBMapper.mapOutFeedbackEntityToFeedback(any())).thenReturn(feedback);
 
-        Mono<Pregunta> publisher = this.feedbackDBDao.guardarPreguntas(Entrevista.builder().build());
+        Mono<Feedback> publisher = this.feedbackDBDao.guardarPreguntas(Feedback.builder().build());
 
         StepVerifier
                 .create(publisher)
-                .expectNext(pregunta)
+                .expectNext(feedback)
                 .verifyComplete();
 
-        verify(this.feedbackMapper, times(1)).mapEntrevistaToFeedbackEntity(any());
+        verify(this.feedbackDBMapper, times(1)).mapInFeedbackToFeedbackEntity(any());
         verify(this.feedbackRepository, times(1)).save(any());
-        verify(this.feedbackMapper, times(1)).mapFeedbackEntityToPreguntaSave(any());
+        verify(this.feedbackDBMapper, times(1)).mapOutFeedbackEntityToFeedback(any());
     }
 
     @Test
     void testActualizarRespuestas() throws IOException {
         FeedbackEntity feedbackEntity = FeedbackMock.getInstance().getFeedbackEntity();
-        Respuesta respuesta = FeedbackMock.getInstance().getRespuesta();
+        Feedback feedback = FeedbackMock.getInstance().getFeedback();
 
         when(this.feedbackRepository.findByIdEntrevista(anyString())).thenReturn(Mono.just(feedbackEntity));
         when(this.feedbackRepository.save(any())).thenReturn(Mono.just(FeedbackEntity.builder().build()));
-        when(this.feedbackMapper.mapFeedbackEntityToRespuesta(any())).thenReturn(respuesta);
+        when(this.feedbackDBMapper.mapOutFeedbackEntityToFeedback(any())).thenReturn(feedback);
 
-        Mono<Respuesta> publisher = this.feedbackDBDao.actualizarRespuestas(respuesta);
+        Mono<Feedback> publisher = this.feedbackDBDao.actualizarRespuestas(feedback);
 
         StepVerifier
                 .create(publisher)
-                .expectNext(respuesta)
+                .expectNext(feedback)
                 .verifyComplete();
 
         verify(this.feedbackRepository, times(1)).findByIdEntrevista(any());
         verify(this.feedbackRepository, times(1)).save(any());
-        verify(this.feedbackMapper, times(1)).mapFeedbackEntityToRespuesta(any());
+        verify(this.feedbackDBMapper, times(1)).mapOutFeedbackEntityToFeedback(any());
     }
 
     @Test
@@ -86,7 +82,7 @@ class FeedbackDBDaoTest {
 
         when(this.feedbackRepository.findByIdEntrevista(anyString())).thenReturn(Mono.just(feedbackEntity));
         when(this.feedbackRepository.save(any())).thenReturn(Mono.just(feedbackEntityUpdated));
-        when(this.feedbackMapper.mapFeedbackEntityToFeedback(any())).thenReturn(feedback);
+        when(this.feedbackDBMapper.mapOutFeedbackEntityToFeedback(any())).thenReturn(feedback);
 
         Mono<Feedback> publisher = this.feedbackDBDao.actualizarFeedback(feedback);
 
@@ -100,37 +96,37 @@ class FeedbackDBDaoTest {
 
         verify(this.feedbackRepository, times(1)).findByIdEntrevista(any());
         verify(this.feedbackRepository, times(1)).save(any());
-        verify(this.feedbackMapper, times(1)).mapFeedbackEntityToFeedback(any());
+        verify(this.feedbackDBMapper, times(1)).mapOutFeedbackEntityToFeedback(any());
     }
 
     @Test
     void testObtenerPreguntas() throws IOException {
         FeedbackEntity feedbackEntity = FeedbackMock.getInstance().getFeedbackEntity();
-        PreguntaComentarioEntrevista preguntaComentarioEntrevista = PreguntaComentarioEntrevista.builder().build();
+        EntrevistaFeedback entrevistaFeedback = EntrevistaFeedback.builder().build();
 
         when(this.feedbackRepository.findByIdEntrevista(anyString())).thenReturn(Mono.just(feedbackEntity));
-        when(this.feedbackMapper.mapEntrevistaFeedbackEntityToPreguntaComentario(any())).thenReturn(preguntaComentarioEntrevista);
+        when(this.feedbackDBMapper.mapOutEntrevistaFeedbackEntityToEntrevistaFeedback(any())).thenReturn(entrevistaFeedback);
 
-        Flux<PreguntaComentarioEntrevista> publisher = this.feedbackDBDao.obtenerPreguntas("any");
+        Flux<EntrevistaFeedback> publisher = this.feedbackDBDao.obtenerPreguntas("any");
 
         StepVerifier
                 .create(publisher)
-                .expectNext(preguntaComentarioEntrevista)
+                .expectNext(entrevistaFeedback)
                 .verifyComplete();
 
         verify(this.feedbackRepository, times(1)).findByIdEntrevista(any());
-        verify(this.feedbackMapper, times(1)).mapEntrevistaFeedbackEntityToPreguntaComentario(any());
+        verify(this.feedbackDBMapper, times(1)).mapOutEntrevistaFeedbackEntityToEntrevistaFeedback(any());
     }
 
     @Test
     void testObtenerEntrevistaFeedback() throws IOException {
         FeedbackEntity feedbackEntity = FeedbackMock.getInstance().getFeedbackEntity();
-        FeedbackResponse feedbackResponse = FeedbackResponse.builder().build();
+        EntrevistaFeedback feedbackResponse = EntrevistaFeedback.builder().build();
 
         when(this.feedbackRepository.findByIdEntrevista(anyString())).thenReturn(Mono.just(feedbackEntity));
-        when(this.feedbackMapper.mapEntrevistaFeedbackEntityToFeedbackResponse(any())).thenReturn(feedbackResponse);
+        when(this.feedbackDBMapper.mapOutEntrevistaFeedbackEntityToEntrevistaFeedback(any())).thenReturn(feedbackResponse);
 
-        Flux<FeedbackResponse> publisher = this.feedbackDBDao.obtenerEntrevistaFeedback("any");
+        Flux<EntrevistaFeedback> publisher = this.feedbackDBDao.obtenerEntrevistaFeedback("any");
 
         StepVerifier.
                 create(publisher)
@@ -138,6 +134,6 @@ class FeedbackDBDaoTest {
                 .verifyComplete();
 
         verify(this.feedbackRepository, times(1)).findByIdEntrevista(any());
-        verify(this.feedbackMapper, times(1)).mapEntrevistaFeedbackEntityToFeedbackResponse(any());
+        verify(this.feedbackDBMapper, times(1)).mapOutEntrevistaFeedbackEntityToEntrevistaFeedback(any());
     }
 }

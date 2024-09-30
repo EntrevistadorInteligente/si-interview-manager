@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,10 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PruebaEntrevistaDto {
+public class PruebaEntrevistaRequest {
     private String nombreEmpresa;
     private String tituloVacante;
     private String descripcionEntrevista;
-    private List<PreguntaDto> preguntas;
+    private List<PreguntaRequest> preguntas;
     private String rol;
 }

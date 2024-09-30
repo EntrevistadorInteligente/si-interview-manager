@@ -2,7 +2,7 @@ package com.entrevistador.generadorfeedback.infrastructure.adapter.dao;
 
 import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevista;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.EntrevistaEntity;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.out.PruebaEntrevistaMapper;
 import com.entrevistador.generadorfeedback.infrastructure.repositoy.EntrevistaRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ class PruebaEntrevistaDBDaoTest {
     @Mock
     private EntrevistaRepository entrevistaRepository;
     @Mock
-    private FeedbackMapper feedbackMapper;
+    private PruebaEntrevistaMapper pruebaEntrevistaMapper;
 
     @Test
     void testGetPreguntas() {
@@ -33,7 +33,8 @@ class PruebaEntrevistaDBDaoTest {
 
         when(this.entrevistaRepository.findAllByRol(anyString()))
                 .thenReturn(Flux.just(EntrevistaEntity.builder().build()));
-        when(this.feedbackMapper.mapEntrevistaEntityToPruebaEntrevistaResponse(any())).thenReturn(feedbackResponse);
+        when(this.pruebaEntrevistaMapper.mapOutEntrevistaEntityToPruebaEntrevista(any()))
+                .thenReturn(feedbackResponse);
 
         Flux<PruebaEntrevista> publisher = this.pruebaEntrevistaDBDao.getPreguntas("any");
 
@@ -43,6 +44,6 @@ class PruebaEntrevistaDBDaoTest {
                 .verifyComplete();
 
         verify(this.entrevistaRepository, times(1)).findAllByRol(anyString());
-        verify(this.feedbackMapper, times(1)).mapEntrevistaEntityToPruebaEntrevistaResponse(any());
+        verify(this.pruebaEntrevistaMapper, times(1)).mapOutEntrevistaEntityToPruebaEntrevista(any());
     }
 }

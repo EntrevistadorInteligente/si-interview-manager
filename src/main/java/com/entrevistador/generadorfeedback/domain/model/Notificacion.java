@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+//TODO: Esta Clase se mantendra por ser usada en el Clase FeedbackService#generarNotificacion
 @Getter
 @Setter
 @AllArgsConstructor

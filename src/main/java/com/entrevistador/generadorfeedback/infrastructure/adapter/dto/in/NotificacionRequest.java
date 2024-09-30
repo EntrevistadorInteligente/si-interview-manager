@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in;
 
 import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NotificacionDto {
+public class NotificacionRequest {
     @JsonProperty("tipo")
     private TipoNotificacionEnum tipo;
     @JsonProperty("mensaje")

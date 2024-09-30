@@ -1,13 +1,10 @@
-package com.entrevistador.generadorfeedback.domain.model;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/*
- * Clase que representa el dominio de PreguntaEntity
- */
 @Data
 @Builder
 @NoArgsConstructor

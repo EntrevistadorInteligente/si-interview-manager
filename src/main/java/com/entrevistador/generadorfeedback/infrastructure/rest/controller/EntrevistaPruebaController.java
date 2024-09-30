@@ -1,10 +1,10 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.service.PruebaEntrevistaService;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.ConfirmacionDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackResponseDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PruebaEntrevistaDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.ConfirmacionResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.PruebaEntrevistaResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.PruebaEntrevistaRequest;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.EntrevistaPruebaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,21 +24,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EntrevistaPruebaController {
     private final PruebaEntrevistaService pruebaEntrevistaService;
-    private final FeedbackMapper feedbackMapper;
+    private final EntrevistaPruebaMapper entrevistaPruebaMapper;
 
     @GetMapping(path = "/preguntas")
-    public Flux<PruebaEntrevistaDto> obtenerPreguntas(@RequestParam("rol") String rol) {
+    public Flux<PruebaEntrevistaResponse> obtenerPreguntas(@RequestParam("rol") String rol) {
         return this.pruebaEntrevistaService.getPreguntas(rol)
-                .map(this.feedbackMapper::mapPruebaEntrevistaResponseToPruebaEntrevistaDto);
+                .map(this.entrevistaPruebaMapper::mapOutPruebaEntrevistaToPruebaEntrevistaResponse);
     }
 
     @PostMapping(path = "/entrevistas")
-    public Mono<ResponseEntity<ConfirmacionDto>> guardarEntrevistas(@RequestBody List<PruebaEntrevistaDto> entrevistas) {
-        return Flux.fromIterable(entrevistas).map(this.feedbackMapper::mapPruebaEntrevistaDtoToPruebaEntrevistaRequest)
+    public Mono<ResponseEntity<ConfirmacionResponse>> guardarEntrevistas(@RequestBody List<PruebaEntrevistaRequest> entrevistas) {
+        return Flux.fromIterable(entrevistas).map(this.entrevistaPruebaMapper::mapInPruebaEntrevistaRequestToPruebaEntrevista)
                 .flatMap(this.pruebaEntrevistaService::guardarEntrevista)
-                .map(this.feedbackMapper::mapPruebaEntrevistaResponseToPruebaEntrevistaDto)
+                .map(this.entrevistaPruebaMapper::mapOutPruebaEntrevistaToPruebaEntrevistaResponse)
                         .then(Mono.just(ResponseEntity.status(HttpStatus.CREATED)
-                        .body(ConfirmacionDto.builder().valor("Entrevistas guardadas con éxito").build())));
+                        .body(ConfirmacionResponse.builder().valor("Entrevistas guardadas con éxito").build())));
     }
 
 }

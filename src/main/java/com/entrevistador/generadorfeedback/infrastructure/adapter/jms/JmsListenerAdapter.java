@@ -2,9 +2,9 @@ package com.entrevistador.generadorfeedback.infrastructure.adapter.jms;
 
 import com.entrevistador.generadorfeedback.application.usescases.FeedbackCreation;
 import com.entrevistador.generadorfeedback.application.usescases.PreguntaCreation;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.EntrevistaDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.FeedbackDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.KafkaEntrevistaResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.KafkaFeedbackResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.KafkaListenerMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +18,16 @@ import reactor.core.publisher.Mono;
 public class JmsListenerAdapter {
     private final FeedbackCreation feedbackCreation;
     private final PreguntaCreation preguntaCreation;
-    private final FeedbackMapper feedbackMapper;
+    private final KafkaListenerMapper kafkaListenerMapper;
 
     @KafkaListener(topics = "feedbackListenerTopic", groupId = "my-group2")
     public void receptorFeedBack(String jsonData) {
         final ObjectMapper mapper = new ObjectMapper();
         try {
-            FeedbackDto json = mapper.readValue(jsonData, FeedbackDto.class);
+            KafkaFeedbackResponse kafkaFeedbackResponse = mapper.readValue(jsonData, KafkaFeedbackResponse.class);
 
-            Mono.just(json)
-                    .map(this.feedbackMapper::mapFeedbackDtoToFeedback)
+            Mono.just(kafkaFeedbackResponse)
+                    .map(this.kafkaListenerMapper::mapInKafkaFeedbackRequestToFeedback)
                     .flatMap(this.feedbackCreation::actualizarFeedback)
                     .block();
         } catch (JsonProcessingException e) {
@@ -39,9 +39,10 @@ public class JmsListenerAdapter {
     public void receptorPreguntasEntrevista(String jsonData) {
         final ObjectMapper mapper = new ObjectMapper();
         try {
-            EntrevistaDto json = mapper.readValue(jsonData, EntrevistaDto.class);
-            Mono.just(json)
-                    .map(this.feedbackMapper::mapEntrevistaDtoToEntrevista)
+            KafkaEntrevistaResponse kafkaEntrevistaResponse = mapper.readValue(jsonData, KafkaEntrevistaResponse.class);
+
+            Mono.just(kafkaEntrevistaResponse)
+                    .map(this.kafkaListenerMapper::mapInKafkaEntrevistaRequestToFeedback)
                     .flatMap(this.preguntaCreation::guardarPreguntas)
                     .block();
         } catch (JsonProcessingException e) {

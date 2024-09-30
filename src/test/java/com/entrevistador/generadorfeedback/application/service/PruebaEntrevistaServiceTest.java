@@ -1,5 +1,6 @@
 package com.entrevistador.generadorfeedback.application.service;
 
+import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevista;
 import com.entrevistador.generadorfeedback.domain.port.PruebaEntrevistaDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,10 +29,10 @@ class PruebaEntrevistaServiceTest {
 
     @Test
     void shouldGetPreguntasWhenValidRequest() {
-        PruebaEntrevistaResponse soloPreguntaImp = new PruebaEntrevistaResponse("", "");
+        PruebaEntrevista soloPreguntaImp = PruebaEntrevista.builder().build();
         when(this.pruebaEntrevistaDao.getPreguntas(anyString())).thenReturn(Flux.just(soloPreguntaImp));
 
-        Flux<PruebaEntrevistaResponse> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
+        Flux<PruebaEntrevista> publisher = this.pruebaEntrevistaService.getPreguntas("perfil");
 
         StepVerifier
                 .create(publisher)
