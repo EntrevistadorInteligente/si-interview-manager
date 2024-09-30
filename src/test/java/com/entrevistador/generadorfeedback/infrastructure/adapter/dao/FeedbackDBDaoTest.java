@@ -34,6 +34,25 @@ class FeedbackDBDaoTest {
     private FeedbackDBMapper feedbackDBMapper;
 
     @Test
+    void testObtenerFeedback() {
+        Feedback feedback = Feedback.builder().build();
+        FeedbackEntity feedbackEntity = FeedbackEntity.builder().build();
+
+        when(this.feedbackRepository.findByIdEntrevista(anyString())).thenReturn(Mono.just(feedbackEntity));
+        when(this.feedbackDBMapper.mapOutFeedbackEntityToFeedback(any())).thenReturn(feedback);
+
+        Mono<Feedback> publisher = this.feedbackDBDao.obtenerFeedback("any");
+
+        StepVerifier
+                .create(publisher)
+                .expectNext(feedback)
+                .verifyComplete();
+
+        verify(this.feedbackRepository, times(1)).findByIdEntrevista(any());
+        verify(this.feedbackDBMapper, times(1)).mapOutFeedbackEntityToFeedback(any());
+    }
+
+    @Test
     void testGuardarPreguntas() {
         Feedback feedback = Feedback.builder().build();
 
