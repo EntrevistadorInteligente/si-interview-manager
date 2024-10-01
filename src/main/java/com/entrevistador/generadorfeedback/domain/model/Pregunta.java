@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PreguntaRequest {
+public class Pregunta {
     private String descripcion;
     private String titulo;
 }

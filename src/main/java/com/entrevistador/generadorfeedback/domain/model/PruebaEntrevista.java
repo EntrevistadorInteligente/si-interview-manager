@@ -19,6 +19,6 @@ public class PruebaEntrevista {
     private String nombreEmpresa;
     private String tituloVacante;
     private String descripcionEntrevista;
-    private List<PreguntaRequest> preguntas;
+    private List<Pregunta> preguntas;
     private String rol;
 }
