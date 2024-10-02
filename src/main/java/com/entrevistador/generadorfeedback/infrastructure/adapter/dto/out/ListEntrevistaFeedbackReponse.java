@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PreguntaComentarioResponse {
+public class ListEntrevistaFeedbackReponse {
     private String idPregunta;
     private String pregunta;
+    private String respuesta;
+    private String feedback;
 }

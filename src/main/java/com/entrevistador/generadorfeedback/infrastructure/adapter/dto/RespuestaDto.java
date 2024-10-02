@@ -1,6 +1,6 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
 
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.RespuestaComentarioRequest;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.CreateRespuestaComentarioRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,5 +16,5 @@ import java.util.List;
 public class RespuestaDto {
     private String idEntrevista;
     private String username;
-    private List<RespuestaComentarioRequest> procesoEntrevista;
+    private List<CreateRespuestaComentarioRequest> procesoEntrevista;
 }

@@ -1,10 +1,8 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.client;
 
 import com.entrevistador.generadorfeedback.domain.model.Notificacion;
-import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.FeedbackMapper;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.out.NotificacionesMapper;
 import com.entrevistador.generadorfeedback.infrastructure.properties.WebFluxProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
@@ -27,7 +25,7 @@ class NotificacionesRestClientTest {
     private NotificacionesRestClient notificacionesRestClient;
 
     private final WebFluxProperties webFluxProperties = new WebFluxProperties();
-    private final FeedbackMapper feedbackMapper = Mappers.getMapper(FeedbackMapper.class);
+    private final NotificacionesMapper notificacionesMapper = Mappers.getMapper(NotificacionesMapper.class);
 
     @BeforeAll
     static void setUp() throws IOException {
@@ -52,7 +50,7 @@ class NotificacionesRestClientTest {
         String baseUrl = String.format("http://localhost:%s", mockWebServer.getPort());
         webfluxComponent.setUrlBase(baseUrl);
         this.notificacionesRestClient =
-                new NotificacionesRestClient(WebClient.builder(), this.webFluxProperties, this.feedbackMapper);
+                new NotificacionesRestClient(WebClient.builder(), this.webFluxProperties, this.notificacionesMapper);
     }
 
     @Test

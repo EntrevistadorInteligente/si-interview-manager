@@ -3,7 +3,7 @@ package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
 import com.entrevistador.generadorfeedback.domain.exception.FeedbackProcessStatusException;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.RespuestaComentarioRequest;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.CreateRespuestaComentarioRequest;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.ConfirmacionResponse;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.RespuestaMapper;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class RespuestaControllerTest {
 
     @Test
     void testCrearSolicitudFeedback() {
-        RespuestaComentarioRequest respuestaComentarioRequest = RespuestaComentarioRequest.builder().build();
+        CreateRespuestaComentarioRequest createRespuestaComentarioRequest = CreateRespuestaComentarioRequest.builder().build();
 
         when(this.respuestaMapper.mapInIdEntrevistaAndprocesoEntrevistaToRespuesta(anyString(), anyList())).thenReturn(Feedback.builder().build());
         when(this.respuestaCreation.iniciarSolicitudFeedback(any())).thenReturn(Mono.empty());
@@ -43,7 +43,7 @@ class RespuestaControllerTest {
         this.webTestClient
                 .post()
                 .uri(URL.append("/solicitudes-feedback/entrevistas/{idEntrevista}").toString(), 1)
-                .body(Flux.just(respuestaComentarioRequest), RespuestaComentarioRequest.class)
+                .body(Flux.just(createRespuestaComentarioRequest), CreateRespuestaComentarioRequest.class)
                 .exchange()
                 .expectStatus()
                 .isCreated()
@@ -53,7 +53,7 @@ class RespuestaControllerTest {
 
     @Test
     void testCrearSolicitudFeedback_FeedbackProcessStatusException() {
-        RespuestaComentarioRequest respuestaComentarioRequest = RespuestaComentarioRequest.builder().build();
+        CreateRespuestaComentarioRequest createRespuestaComentarioRequest = CreateRespuestaComentarioRequest.builder().build();
 
         when(this.respuestaMapper.mapInIdEntrevistaAndprocesoEntrevistaToRespuesta(anyString(), anyList())).thenReturn(Feedback.builder().build());
         when(this.respuestaCreation.iniciarSolicitudFeedback(any())).thenReturn(Mono.error(new FeedbackProcessStatusException("error")));
@@ -61,7 +61,7 @@ class RespuestaControllerTest {
         this.webTestClient
                 .post()
                 .uri(URL.append("/solicitudes-feedback/entrevistas/{idEntrevista}").toString(), 1)
-                .body(Flux.just(respuestaComentarioRequest), RespuestaComentarioRequest.class)
+                .body(Flux.just(createRespuestaComentarioRequest), CreateRespuestaComentarioRequest.class)
                 .exchange()
                 .expectStatus()
                 .isBadRequest()

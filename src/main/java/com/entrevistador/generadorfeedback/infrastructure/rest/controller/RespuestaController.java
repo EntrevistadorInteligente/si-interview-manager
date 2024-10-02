@@ -1,7 +1,7 @@
 package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.RespuestaComentarioRequest;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.CreateRespuestaComentarioRequest;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.ConfirmacionResponse;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.RespuestaMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class RespuestaController {
     @PostMapping(value = "/solicitudes-feedback/entrevistas/{idEntrevista}")
     public Mono<ResponseEntity<ConfirmacionResponse>> crearSolicitudFeedback(
             @PathVariable String idEntrevista,
-            @RequestBody List<RespuestaComentarioRequest> procesoEntrevistaRequest
+            @RequestBody List<CreateRespuestaComentarioRequest> procesoEntrevistaRequest
     ) {
         return Mono.just(this.respuestaMapper.mapInIdEntrevistaAndprocesoEntrevistaToRespuesta(idEntrevista, procesoEntrevistaRequest))
                 .flatMap(this.respuestaCreation::iniciarSolicitudFeedback)

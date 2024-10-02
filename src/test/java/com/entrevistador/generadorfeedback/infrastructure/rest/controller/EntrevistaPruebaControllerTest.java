@@ -2,9 +2,10 @@ package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.service.PruebaEntrevistaService;
 import com.entrevistador.generadorfeedback.domain.model.PruebaEntrevista;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.PruebaEntrevistaRequest;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.CreatePruebaEntrevistaRequest;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.ConfirmacionResponse;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.PruebaEntrevistaResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.CreatePruebaEntrevistaResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.ListPruebaEntrevistaResponse;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.EntrevistaPruebaMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,8 @@ class EntrevistaPruebaControllerTest {
     @Test
     void testObtenerPreguntas_Get() {
         when(this.interviewTestService.getPreguntas(anyString())).thenReturn(Flux.just(PruebaEntrevista.builder().build()));
-        when(this.entrevistaPruebaMapper.mapOutPruebaEntrevistaToPruebaEntrevistaResponse(any()))
-                .thenReturn(PruebaEntrevistaResponse.builder().build());
+        when(this.entrevistaPruebaMapper.mapOutPruebaEntrevistaToListPruebaEntrevistaResponse(any()))
+                .thenReturn(ListPruebaEntrevistaResponse.builder().build());
 
         this.webTestClient
                 .get()
@@ -50,19 +51,19 @@ class EntrevistaPruebaControllerTest {
 
     @Test
     void testGuardarEntrevistas_WhenPost() {
-        PruebaEntrevistaRequest pruebaEntrevistaRequest = PruebaEntrevistaRequest.builder().build();
+        CreatePruebaEntrevistaRequest createPruebaEntrevistaRequest = CreatePruebaEntrevistaRequest.builder().build();
 
-        when(this.entrevistaPruebaMapper.mapInPruebaEntrevistaRequestToPruebaEntrevista(any()))
+        when(this.entrevistaPruebaMapper.mapInCreatePruebaEntrevistaRequestToPruebaEntrevista(any()))
                 .thenReturn(PruebaEntrevista.builder().build());
         when(this.interviewTestService.guardarEntrevista(any()))
                 .thenReturn(Mono.just(PruebaEntrevista.builder().build()));
-        when(this.entrevistaPruebaMapper.mapOutPruebaEntrevistaToPruebaEntrevistaResponse(any()))
-                .thenReturn(PruebaEntrevistaResponse.builder().build());
+        when(this.entrevistaPruebaMapper.mapOutPruebaEntrevistaToCreatePruebaEntrevistaResponse(any()))
+                .thenReturn(CreatePruebaEntrevistaResponse.builder().build());
 
         this.webTestClient
                 .post()
                 .uri(URL.append("/entrevistas").toString())
-                .body(Flux.just(pruebaEntrevistaRequest), PruebaEntrevistaRequest.class)
+                .body(Flux.just(createPruebaEntrevistaRequest), CreatePruebaEntrevistaRequest.class)
                 .exchange()
                 .expectStatus()
                 .isCreated()

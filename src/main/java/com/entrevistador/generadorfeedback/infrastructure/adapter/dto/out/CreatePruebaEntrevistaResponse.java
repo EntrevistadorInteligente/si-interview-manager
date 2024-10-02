@@ -11,10 +11,10 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PruebaEntrevistaResponse {
+public class CreatePruebaEntrevistaResponse {
     private String nombreEmpresa;
     private String tituloVacante;
     private String descripcionEntrevista;
-    private List<PreguntaResponse> preguntas;
+    private List<CreatePreguntaResponse> preguntas;
     private String rol;
 }

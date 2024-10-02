@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PreguntaRequest {
+public class ListPreguntaResponse {
     private String descripcion;
     private String titulo;
 }
