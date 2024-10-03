@@ -2,10 +2,10 @@ package com.entrevistador.generadorfeedback.infrastructure.rest.controller;
 
 import com.entrevistador.generadorfeedback.application.usescases.RespuestaCreation;
 import com.entrevistador.generadorfeedback.domain.exception.FeedbackProcessStatusException;
-import com.entrevistador.generadorfeedback.domain.model.Respuesta;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.ConfirmacionDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.RespuestaComentarioDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.domain.model.Feedback;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.CreateRespuestaComentarioRequest;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out.ConfirmacionResponse;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.in.RespuestaMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -31,37 +31,37 @@ class RespuestaControllerTest {
     @MockBean
     private RespuestaCreation respuestaCreation;
     @MockBean
-    private FeedbackMapper feedbackMapper;
+    private RespuestaMapper respuestaMapper;
 
     @Test
     void testCrearSolicitudFeedback() {
-        RespuestaComentarioDto respuestaComentarioDto = RespuestaComentarioDto.builder().build();
+        CreateRespuestaComentarioRequest createRespuestaComentarioRequest = CreateRespuestaComentarioRequest.builder().build();
 
-        when(this.feedbackMapper.mapIdEntrevistaAndprocesoEntrevistaToRespuesta(anyString(), anyList())).thenReturn(Respuesta.builder().build());
+        when(this.respuestaMapper.mapInIdEntrevistaAndprocesoEntrevistaToRespuesta(anyString(), anyList())).thenReturn(Feedback.builder().build());
         when(this.respuestaCreation.iniciarSolicitudFeedback(any())).thenReturn(Mono.empty());
 
         this.webTestClient
                 .post()
                 .uri(URL.append("/solicitudes-feedback/entrevistas/{idEntrevista}").toString(), 1)
-                .body(Flux.just(respuestaComentarioDto), RespuestaComentarioDto.class)
+                .body(Flux.just(createRespuestaComentarioRequest), CreateRespuestaComentarioRequest.class)
                 .exchange()
                 .expectStatus()
                 .isCreated()
-                .expectBody(ConfirmacionDto.class)
-                .value(ConfirmacionDto::getValor, equalTo("Solicitud Feedback generado con exito"));
+                .expectBody(ConfirmacionResponse.class)
+                .value(ConfirmacionResponse::getValor, equalTo("Solicitud Feedback generado con exito"));
     }
 
     @Test
     void testCrearSolicitudFeedback_FeedbackProcessStatusException() {
-        RespuestaComentarioDto respuestaComentarioDto = RespuestaComentarioDto.builder().build();
+        CreateRespuestaComentarioRequest createRespuestaComentarioRequest = CreateRespuestaComentarioRequest.builder().build();
 
-        when(this.feedbackMapper.mapIdEntrevistaAndprocesoEntrevistaToRespuesta(anyString(), anyList())).thenReturn(Respuesta.builder().build());
+        when(this.respuestaMapper.mapInIdEntrevistaAndprocesoEntrevistaToRespuesta(anyString(), anyList())).thenReturn(Feedback.builder().build());
         when(this.respuestaCreation.iniciarSolicitudFeedback(any())).thenReturn(Mono.error(new FeedbackProcessStatusException("error")));
 
         this.webTestClient
                 .post()
                 .uri(URL.append("/solicitudes-feedback/entrevistas/{idEntrevista}").toString(), 1)
-                .body(Flux.just(respuestaComentarioDto), RespuestaComentarioDto.class)
+                .body(Flux.just(createRespuestaComentarioRequest), CreateRespuestaComentarioRequest.class)
                 .exchange()
                 .expectStatus()
                 .isBadRequest()

@@ -1,9 +1,9 @@
 package com.entrevistador.generadorfeedback.infrastructure.adapter.jms;
 
-import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
-import com.entrevistador.generadorfeedback.domain.model.Respuesta;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.PythonResponseDto;
-import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.FeedbackMapper;
+import com.entrevistador.generadorfeedback.domain.port.jms.JmsPublisherClient;
+import com.entrevistador.generadorfeedback.domain.model.Feedback;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in.KafkaPythonRequest;
+import com.entrevistador.generadorfeedback.infrastructure.adapter.mapper.out.KafkaPublisherMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,23 +22,23 @@ public final class JmsPublisherAdapter implements JmsPublisherClient {
     private String feedbackPublisherTopic;
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final FeedbackMapper feedbackMapper;
+    private final KafkaPublisherMapper kafkaPublisherMapper;
 
     @Override
-    public Mono<Void> enviarsolicitudFeedback(Respuesta respuesta) {
+    public Mono<Void> enviarsolicitudFeedback(Feedback feedback) {
         try {
-            PythonResponseDto pythonResponseDto = this.feedbackMapper.mapRespuestaToPythonResponseDto(respuesta);
+            KafkaPythonRequest kafkaPythonRequest = this.kafkaPublisherMapper.mapInFeedbackToKafkaPythonRequest(feedback);
 
             CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(feedbackPublisherTopic,
-                    pythonResponseDto
+                    kafkaPythonRequest
             );
             future.whenComplete((result, ex) -> {
                 if (ex == null) {
-                    System.out.println("Sent message=[" + respuesta.getIdEntrevista() +
+                    System.out.println("Sent message=[" + feedback.getIdEntrevista() +
                             "] with offset=[" + result.getRecordMetadata().offset() + "]");
                 } else {
                     System.out.println("Unable to send message=[" +
-                            respuesta.toString() + "] due to : " + ex.getMessage());
+                            feedback.toString() + "] due to : " + ex.getMessage());
                 }
             });
 

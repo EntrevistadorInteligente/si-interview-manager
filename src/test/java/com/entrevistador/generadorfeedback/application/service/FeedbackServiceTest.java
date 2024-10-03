@@ -1,14 +1,10 @@
 package com.entrevistador.generadorfeedback.application.service;
 
 import com.entrevistador.generadorfeedback.domain.exception.FeedbackProcessStatusException;
-import com.entrevistador.generadorfeedback.domain.jms.JmsPublisherClient;
-import com.entrevistador.generadorfeedback.domain.model.Entrevista;
+import com.entrevistador.generadorfeedback.domain.port.jms.JmsPublisherClient;
+import com.entrevistador.generadorfeedback.domain.model.EntrevistaFeedback;
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
-import com.entrevistador.generadorfeedback.domain.model.FeedbackResponse;
 import com.entrevistador.generadorfeedback.domain.model.Notificacion;
-import com.entrevistador.generadorfeedback.domain.model.Pregunta;
-import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
-import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import com.entrevistador.generadorfeedback.domain.model.enums.TipoNotificacionEnum;
 import com.entrevistador.generadorfeedback.domain.port.FeedbackDao;
 import com.entrevistador.generadorfeedback.domain.port.client.NotificacionesClient;
@@ -40,11 +36,11 @@ class FeedbackServiceTest {
 
     @Test
     void testGuardarPreguntas() {
-        Pregunta pregunta = Pregunta.builder().username("any").idEntrevista("any").build();
-        when(this.feedbackDao.guardarPreguntas(any())).thenReturn(Mono.just(pregunta));
+        Feedback feedback = Feedback.builder().username("any").idEntrevista("any").build();
+        when(this.feedbackDao.guardarPreguntas(any())).thenReturn(Mono.just(feedback));
         when(this.notificacionesClient.enviar(anyString(), any())).thenReturn(Mono.empty());
 
-        Mono<Void> publisher = this.feedbackService.guardarPreguntas(Entrevista.builder().build());
+        Mono<Void> publisher = this.feedbackService.guardarPreguntas(Feedback.builder().build());
 
         StepVerifier
                 .create(publisher)
@@ -56,14 +52,14 @@ class FeedbackServiceTest {
 
     @Test
     void testObtenerPreguntas() {
-        PreguntaComentarioEntrevista preguntaComentarioEntrevista = PreguntaComentarioEntrevista.builder().build();
-        when(this.feedbackDao.obtenerPreguntas(anyString())).thenReturn(Flux.just(preguntaComentarioEntrevista));
+        EntrevistaFeedback entrevistaFeedback = EntrevistaFeedback.builder().build();
+        when(this.feedbackDao.obtenerPreguntas(anyString())).thenReturn(Flux.just(entrevistaFeedback));
 
-        Flux<PreguntaComentarioEntrevista> publisher = this.feedbackService.obtenerPreguntas("any");
+        Flux<EntrevistaFeedback> publisher = this.feedbackService.obtenerPreguntas("any");
 
         StepVerifier
                 .create(publisher)
-                .expectNext(preguntaComentarioEntrevista)
+                .expectNext(entrevistaFeedback)
                 .verifyComplete();
 
         verify(this.feedbackDao, times(1)).obtenerPreguntas(anyString());
@@ -74,10 +70,10 @@ class FeedbackServiceTest {
         Feedback feedback = Feedback.builder().feedbackProcess(TipoNotificacionEnum.GF).build();
 
         when(this.feedbackDao.obtenerFeedback(anyString())).thenReturn(Mono.just(feedback));
-        when(this.feedbackDao.actualizarRespuestas(any())).thenReturn(Mono.just(Respuesta.builder().build()));
+        when(this.feedbackDao.actualizarRespuestas(any())).thenReturn(Mono.just(Feedback.builder().build()));
         when(this.jmsPublisherClient.enviarsolicitudFeedback(any())).thenReturn(Mono.empty());
 
-        Mono<Void> publisher = this.feedbackService.iniciarSolicitudFeedback(Respuesta.builder().idEntrevista("any").build());
+        Mono<Void> publisher = this.feedbackService.iniciarSolicitudFeedback(Feedback.builder().idEntrevista("any").build());
 
         StepVerifier
                 .create(publisher)
@@ -94,7 +90,7 @@ class FeedbackServiceTest {
 
         when(this.feedbackDao.obtenerFeedback(anyString())).thenReturn(Mono.just(feedback));
 
-        Mono<Void> publisher = this.feedbackService.iniciarSolicitudFeedback(Respuesta.builder().idEntrevista("any").build());
+        Mono<Void> publisher = this.feedbackService.iniciarSolicitudFeedback(Feedback.builder().idEntrevista("any").build());
 
         StepVerifier
                 .create(publisher)
@@ -127,14 +123,14 @@ class FeedbackServiceTest {
 
     @Test
     void testObtenerFeedback() {
-        FeedbackResponse feedbackResponse = FeedbackResponse.builder().build();
-        when(this.feedbackDao.obtenerEntrevistaFeedback(anyString())).thenReturn(Flux.just(feedbackResponse));
+        EntrevistaFeedback entrevistaFeedback = EntrevistaFeedback.builder().build();
+        when(this.feedbackDao.obtenerEntrevistaFeedback(anyString())).thenReturn(Flux.just(entrevistaFeedback));
 
-        Flux<FeedbackResponse> publisher = this.feedbackService.obtenerFeedback("any");
+        Flux<EntrevistaFeedback> publisher = this.feedbackService.obtenerFeedback("any");
 
         StepVerifier
                 .create(publisher)
-                .expectNext(feedbackResponse)
+                .expectNext(entrevistaFeedback)
                 .verifyComplete();
 
         verify(this.feedbackDao, times(1)).obtenerEntrevistaFeedback(anyString());

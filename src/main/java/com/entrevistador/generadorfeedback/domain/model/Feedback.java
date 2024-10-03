@@ -15,10 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Feedback {
+    private String uuid;
     private String idEntrevista;
     private String username;
     private TipoNotificacionEnum feedbackProcess;
-    private List<FeedbackComentario> procesoEntrevista;
+    private List<EntrevistaFeedback> procesoEntrevista;
 
     public Mono<Feedback> validateFeedbackProcess() {
         if (this.feedbackProcess == TipoNotificacionEnum.FG) {

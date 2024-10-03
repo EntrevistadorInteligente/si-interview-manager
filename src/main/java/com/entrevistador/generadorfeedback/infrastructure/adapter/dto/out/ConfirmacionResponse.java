@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class ConfirmacionDto {
+public class ConfirmacionResponse {
     private String valor;
 }

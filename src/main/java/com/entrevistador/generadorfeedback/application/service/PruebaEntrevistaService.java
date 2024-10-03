@@ -19,7 +19,7 @@ public class PruebaEntrevistaService implements com.entrevistador.generadorfeedb
     }
 
     @Override
-    public Mono<PruebaEntrevista> guardarEntrevista(PruebaEntrevista request) {
-        return pruebaEntrevistaDao.guardarEntrevista(request);
+    public Mono<PruebaEntrevista> guardarEntrevista(PruebaEntrevista pruebaEntrevista) {
+        return pruebaEntrevistaDao.guardarEntrevista(pruebaEntrevista);
     }
 }

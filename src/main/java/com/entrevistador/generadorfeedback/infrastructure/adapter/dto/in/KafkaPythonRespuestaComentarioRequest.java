@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PythonRespuestaComentarioDto {
+public class KafkaPythonRespuestaComentarioRequest {
 
     @JsonProperty("id_pregunta")
     private String idPregunta;

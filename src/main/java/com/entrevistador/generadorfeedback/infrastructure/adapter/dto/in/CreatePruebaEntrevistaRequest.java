@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.domain.model;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.in;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,18 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/*
- * Clase que representa el dominio de EntrevistaEntity
- */
-@Getter
 @Builder
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class PruebaEntrevista {
-    private String id;
+@NoArgsConstructor
+public class CreatePruebaEntrevistaRequest {
     private String nombreEmpresa;
     private String tituloVacante;
     private String descripcionEntrevista;
-    private List<Pregunta> preguntas;
+    private List<CreatePreguntaRequest> preguntas;
     private String rol;
 }

@@ -5,14 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Entrevista {
-    private String idEntrevista;
-    private String username;
-    private List<PreguntaGenerada> preguntas;
+public class EntrevistaFeedback {
+    private String idPregunta;
+    private String pregunta;
+    private String respuesta;
+    private String feedback;
+    private String score;
 }

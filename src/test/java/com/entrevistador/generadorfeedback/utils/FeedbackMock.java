@@ -1,7 +1,6 @@
 package com.entrevistador.generadorfeedback.utils;
 
 import com.entrevistador.generadorfeedback.domain.model.Feedback;
-import com.entrevistador.generadorfeedback.domain.model.Respuesta;
 import com.entrevistador.generadorfeedback.infrastructure.adapter.entity.FeedbackEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AccessLevel;
@@ -28,11 +27,6 @@ public class FeedbackMock {
     public FeedbackEntity getFeedbackEntityUpdated() throws IOException {
         return this.mapper.readValue(Thread.currentThread().getContextClassLoader()
                 .getResourceAsStream("mocks/feedback/FeedbackEntityUpdated.json"), FeedbackEntity.class);
-    }
-
-    public Respuesta getRespuesta() throws IOException {
-        return this.mapper.readValue(Thread.currentThread().getContextClassLoader()
-                .getResourceAsStream("mocks/feedback/Respuesta.json"), Respuesta.class);
     }
 
     public Feedback getFeedback() throws IOException {

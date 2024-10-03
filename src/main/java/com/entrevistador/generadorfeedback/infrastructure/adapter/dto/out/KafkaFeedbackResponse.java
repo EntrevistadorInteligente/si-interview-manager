@@ -1,4 +1,4 @@
-package com.entrevistador.generadorfeedback.infrastructure.adapter.dto;
+package com.entrevistador.generadorfeedback.infrastructure.adapter.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,10 +12,10 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EntrevistaDto {
+public class KafkaFeedbackResponse {
     @JsonProperty("id_entrevista")
     private String idEntrevista;
-    @JsonProperty("username")
     private String username;
-    private List<PreguntaGeneradaDto> preguntas;
+    @JsonProperty("proceso_entrevista")
+    private List<KafkaFeedbackComentarioResponse> procesoEntrevista;
 }

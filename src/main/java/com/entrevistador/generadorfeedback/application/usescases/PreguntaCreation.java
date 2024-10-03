@@ -1,14 +1,14 @@
 package com.entrevistador.generadorfeedback.application.usescases;
 
-import com.entrevistador.generadorfeedback.domain.model.Entrevista;
-import com.entrevistador.generadorfeedback.domain.model.PreguntaComentarioEntrevista;
+import com.entrevistador.generadorfeedback.domain.model.EntrevistaFeedback;
+import com.entrevistador.generadorfeedback.domain.model.Feedback;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface PreguntaCreation {
 
-    Mono<Void> guardarPreguntas(Entrevista entrevistaDto);
+    Mono<Void> guardarPreguntas(Feedback feedback);
 
-    Flux<PreguntaComentarioEntrevista> obtenerPreguntas(String entrevitaId);
+    Flux<EntrevistaFeedback> obtenerPreguntas(String entrevitaId);
 
 }
